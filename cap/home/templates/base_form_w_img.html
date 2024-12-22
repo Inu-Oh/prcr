@@ -1,0 +1,24 @@
+{% extends "base_form.html" %}
+
+
+{% block page_header %}{% endblock page_header %}
+
+
+{% block inner_content %}{% endblock inner_content %}
+
+
+{% block script %}
+<!-- https://stackoverflow.com/questions/2472422/django-file-upload-size-limit -->
+<script>
+    document.getElementById("upload_form").addEventListener("submit", function() {
+        console.log('Checking file size');
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            var file = document.getElementById('id_{{ form.upload_field_name }}').files[0];
+            if (file && file.size > {{ form.max_upload_limit }} ) {
+              alert("File " + file.name + " of type " + file.type + " must be < {{ form.max_upload_limit_text }}");
+            return false;
+            }
+        }
+    });
+</script>
+{% endblock script %}

@@ -1,0 +1,63 @@
+{% extends "base_menu.html" %}
+
+
+{% block page_header %}
+{% load humanize %}
+<h2 class="display-5 text-dark"> {{ subcategory.subcategory }} </h2>
+<p class="header-stat badge text-secondary mt-3 p-2 rounded-3 shadow-sm">
+    {% if filtered_products %} {% if filtered_products|length == 1 %}
+    1 product in {{ subcategory.subcategory|lower }}
+    {% else %}{{filtered_products|length}} {{ subcategory.subcategory|lower }}
+    {% endif %}{% else %} 0 {{ subcategory.subcategory|lower }}
+    {% endif %}</p>
+<p><a class="btn btn-md btn-outline-primary mt-3"
+    href="{% url 'prcr:product_subcategory_create' subcategory.id %}">
+    Add a new product to {{ subcategory|lower }} &raquo;</a></p>
+{% endblock page_header %}
+
+
+{% block content %}
+{% for product in filtered_products %}
+<section class="product cards p-2 pt-3 m-3 bg-light rounded-3 shadow-sm">
+    <div class="container-fluid d-flex justify-content-between">
+        <div><a href="{% url 'prcr:product_detail' product.id %}" class="link-style">
+            <p>{{ product.product }}
+                {% for brand in brands %}{% if brand.id == product.brand_id %}
+                <span class="small text-muted">({{ brand.brand }})
+                {% endif %}{% endfor %}
+                {% if product_lowest_price_list %}{% for product_id, price in product_lowest_price_list %}
+                {% if product_id == product.id %}
+                &#9679; Lowest price offer ${{ price|intcomma }},
+                {% endif %}{% endfor %}{% endif %}</span></p>
+            <p class="small text-dark">
+            {% if feature_list %}{% for feature in feature_list %}{% if feature.product_id == product.id %}
+            {{ feature }} &raquo; {% endif %}{% endfor %}{% endif %}</p></a>
+            {% if product.owner_id == user.id %}
+            <p><a class="btn btn-sm btn-outline-secondary mt-1 text-muted"
+                href="{% url 'prcr:product_update' product.id %}">
+                Edit this product &raquo;</a></p>
+            {% endif %}
+        </div>
+        {% if product.content_type %}
+        <img class="product-pic rounded-3 me-1"
+            src="{% url 'prcr:product_picture' product.id %}">
+        {% else %}
+        <a href="{% url 'prcr:product_add_image' product.id %}"
+            class="product-no-pic link-style outline-secondary rounded-3 me-1">
+            Add an image</a>
+        {% endif %}
+    </div>
+</section>
+{% empty %}
+<section class="section p-3 m-3 bg-light rounded-3">
+    <div class="no-content text-danger">
+        <p>There are no products yet in this subcategory.</p>
+    </div>
+</section>
+{% endfor %}
+{% endblock content %}
+
+
+{% block footer %}
+    <p>Copyright or something</p>
+{% endblock footer %}

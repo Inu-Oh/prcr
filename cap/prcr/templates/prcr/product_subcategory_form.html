@@ -1,0 +1,12 @@
+{% extends "base_form_w_img.html" %}
+
+
+{% block page_header %}
+<h3 class="display-6 text-dark">Add a product in {{ subcategory.subcategory|lower }} </h3>
+{% endblock page_header %}
+
+
+{% block inner_content %}
+<input type="submit" value="Cancel" class="btn btn-lg btn-outline-danger"
+    onclick="window.location.href='{% url 'prcr:product_list' subcategory.id %}';return false;">
+{% endblock inner_content %}

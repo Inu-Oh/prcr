@@ -1,0 +1,71 @@
+{% extends "base_menu.html" %}
+
+
+{% block page_header %}
+<h2 class="display-5 text-dark">
+    Browse brands</h2>
+<p class="header-stat badge text-secondary mt-3 p-2 rounded-3 shadow-sm">
+    {% if brand_count != 1 %} {{ brand_count }} brands<br><br><br>
+    {% else %} {{ brand_count }} brand<br><br><br>{% endif %}
+    {% if product_count != 1 %} {{ product_count }} products</p>
+    {% else %} {{ product_count }} product</p>{% endif %}
+<a class="header-link btn btn-md btn-outline-primary" href="{% url 'prcr:brand_create' %}">
+    Add a brand<br> to pricer &raquo;</a>
+{% endblock page_header %}
+
+
+{% block content %}
+{% if brand_list %}
+{% for brand in brand_list %}
+<section class="container-fluid mb-3">
+    <h4 class="heading p-3 m-2 bg-light rounded-3 shadow-sm text-dark d-flex justify-content-between align-items-center">
+        {{ brand }}
+        <a href="{% url 'prcr:product_brand_create' brand.id %}"
+            class="btn btn-sm btn-outline-secondary">
+            Add {{ brand.brand }} products &raquo;</a>
+    </h4>
+</section>
+<section class="container">
+    {% if product_list %}
+    <div class="row m-0">
+        {% for product in product_list %}
+        {% if product.brand.id == brand.id %}
+        <a href="{% url 'prcr:product_detail' product.id %}" class="link-style col-md-6">
+            <div class="cards card p-3 row g-0 border rounded-3 overflow-hidden mb-4 shadow-sm h-md-250 position-relative">
+                <div class="row g-0 card-header flex-md-row">
+                    <h5 class="pt-2 text-dark">
+                    {{ product.product }}</h5>
+                    </div>
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <p class="card-text mb-auto text-dark text-small">
+                        {% if feature_list %} <span class="text-muted">&#9679;</span>
+                        {% for feature in feature_list %}{% if feature.product.id == product.id %}
+                        {{ feature }} &raquo;
+                        {% endif %}{% endfor %}{% endif %}
+                    </p>
+                    {% if product.content_type %}
+                    <img src="{% url 'prcr:product_picture' product.id %}" class="card-pic rounded-3 ms-3">
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+{% endfor %}
+{% else %}
+<section class="section p-1 m-3 bg-light rounded-3">
+    <div class="no-content container-fluid">
+        <p class="p-3 m-2 text-danger">There are no brands yet in Pricer<br>
+            Add categories, subcategories and brands before creating a product</p>
+    </div>
+</section>
+{% endif %}
+{% endblock content %}
+
+
+{% block footer %}
+    <p>Copyright or something</p>
+{% endblock footer %}

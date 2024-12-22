@@ -1,0 +1,72 @@
+{% extends "base_menu.html" %}
+
+
+{% block page_header %}
+<h2 class="display-5 text-dark">
+    Browse<br>categories</h2>
+<p class="header-stat badge text-dark mt-3 p-2 rounded-3 shadow-sm">
+    {% if category_count != 1 %} {{ category_count }} categories<br><br>
+    {% else %} {{ category_count }} category<br><br>{% endif %}
+    {% if subcategory_count != 1 %} {{ subcategory_count }} subcategories<br><br>
+    {% else %} {{ subcategory_count }} subcategory<br><br>{% endif %}
+    {% if product_count != 1 %} {{ product_count }} products<br><p>
+    {% else %} {{ product_count }} product<br></p>{% endif %}
+<a class="header-link btn btn-md btn-outline-primary"
+    href="{% url 'prcr:category_create' %}">
+    Add a category<br>to Pricer &raquo;</a>
+{% endblock page_header %}
+
+
+{% block content %}
+{% if category_list %}
+{% for category in category_list %}
+<section class="no-bg p-1 m-3 bg-light rounded-3">
+    <div class="container-fluid">
+        <h4 class="heading p-3 mb-3 bg-light rounded-3 shadow-sm text-dark d-flex justify-content-between align-items-center">
+        {{ category.category }}
+        <a href="{% url 'prcr:subcategory_create' category.id %}"
+            class="btn btn-sm btn-outline-secondary">
+            Add a subcategory to {{ category.category }} &raquo;</a></h4>
+        {% if subcategory_list %}
+        <ul>
+            {% for subcategory in subcategory_list %}
+            {% if subcategory.category.id == category.id %}
+            <li class="plain-list">
+                <a href="{% url 'prcr:product_list' subcategory.id %}" class="link-style">
+                    <div class="cards p-2 mb-3 rounded 3 shadow-sm text-small">
+                    <strong>{{ subcategory.subcategory }}</strong>
+                    {% if product_list %}<span class="text-muted">
+                        {% for product in product_list %}
+                        {% if product.subcategory.id == subcategory.id %}
+                        {% if forloop.counter < 30 %}
+                        &#9679; {{ product.product }} ({{ product.brand.brand }})
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}</span>
+                    {% endif %}
+                    </div>
+                </a>
+            </li>
+            {% endif %}
+            {% empty %}
+            <p class="p-3 m-2 text-danger">This category has no subcategories. Add one.</p>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</section>
+{% endfor %}
+{% else %}
+<section class="section p-1 m-3 bg-light rounded-3">
+    <div class="no-content container-fluid">
+        <p class="p-3 m-2 text-danger">There are no categories yet in Pricer.<br>
+            Add categories, subcategories and brands before creating a product.</p>
+    </div>
+</section>
+{% endif %}
+{% endblock content %}
+
+
+{% block footer %}
+    <p>Copyright or something</p>
+{% endblock footer %}

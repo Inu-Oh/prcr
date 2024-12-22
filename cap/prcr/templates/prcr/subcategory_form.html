@@ -1,0 +1,12 @@
+{% extends "base_form.html" %}
+
+
+{% block page_header %}
+<h2 class="display-5 text-dark">Add a new subcategory to {{ category }}</h2>
+{% endblock page_header %}
+
+
+{% block inner_content %}
+<input type="submit" value="Cancel" class="btn btn-lg btn-outline-danger"
+    onclick="window.location.href='{% url 'prcr:main_list'%}';return false;">
+{% endblock inner_content %}

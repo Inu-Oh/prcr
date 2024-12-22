@@ -1,0 +1,17 @@
+{% extends "base_bootstrap.html" %}
+
+{% block page_header %}
+<h3>Delete Comment</h3>
+{% endblock page_header %}
+
+{% block content %}
+<p>Are you sure you want to delete</p>
+<p>{{ comment.text }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit"  class="btn btn-primary" value="Yes, delete.">
+  <a href="{% url 'prcr:product_detail' comment.product.id %}"
+    class="btn btn-danger">Cancel</a>
+</form>
+{% endblock content %}
