@@ -53,7 +53,7 @@ class CommentCreateView(LoginRequiredMixin, View):
         return redirect(reverse('prcr:product_detail', args=[pk]))
 
 class CommentDeleteView(OwnerDeleteView):
-    model = Product
+    model = Comment
     template_name = "prcr/comment_delete_form.html"
 
     # https://stackoverflow.com/questions/26290415/deleteview-with-a-dynamic-success-url-dependent-on-id
