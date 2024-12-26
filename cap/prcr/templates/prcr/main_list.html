@@ -26,7 +26,7 @@
         {{ category.category }}
         <a href="{% url 'prcr:subcategory_create' category.id %}"
             class="btn btn-sm btn-outline-secondary">
-            Add a subcategory to {{ category.category }} &raquo;</a></h4>
+            Add a subcategory to {{ category.category|lower }} &raquo;</a></h4>
         {% if subcategory_list %}
         <ul>
             {% for subcategory in subcategory_list %}

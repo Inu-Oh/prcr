@@ -4,6 +4,7 @@ from prcr.owner import OwnerDeleteView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.humanize.templatetags.humanize import naturalday #, naturaltime
+from django.db.models import Q
 from django.db.models.functions import Lower
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -28,6 +29,7 @@ class CategoryListView(ListView):
         subcategory_count = subcategory_list.count()
         product_list = Product.objects.all().order_by('-created_at')
         product_count = product_list.count()
+
         context = {
             'category_count': category_count,
             'category_list': category_list,
@@ -169,12 +171,21 @@ class ProductListView(ListView):
     template_name = "prcr/product_list.html"
 
     def get(self, request, pk):
-        product_list = Product.objects.all().order_by(Lower('product')).values()
-        filtered_products = product_list.filter(subcategory_id=pk)
         subcategory = SubCategory.objects.get(id=pk)
         brands = Brand.objects.all()
         feature_list = Feature.objects.all()
         price_list = Price.objects.all().order_by('-price') # order for lowest price last
+
+        # Search
+        strval = request.GET.get("search", False)
+        if strval:
+            query = Q(product__icontains=strval)
+            product_list = Product.objects.filter(query).select_related().distinct()
+        else:
+            product_list = Product.objects.all()
+
+        product_list = product_list.order_by(Lower('product')).values()
+        filtered_products = product_list.filter(subcategory_id=pk)
 
         # Get the lowest price for each product into a dictionary
         pruduct_lowest_price_dict = {}
@@ -194,7 +205,8 @@ class ProductListView(ListView):
             'subcategory': subcategory,
             'brands': brands,
             'feature_list': feature_list,
-            'product_lowest_price_list': product_lowest_price_list
+            'product_lowest_price_list': product_lowest_price_list,
+            'search': strval,
             }
         return render(request, self.template_name, context)
 

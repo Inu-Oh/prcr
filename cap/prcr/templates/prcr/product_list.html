@@ -4,57 +4,82 @@
 {% block page_header %}
 {% load humanize %}
 <h2 class="display-5 text-dark"> {{ subcategory.subcategory }} </h2>
-<p class="header-stat badge text-secondary mt-3 p-2 rounded-3 shadow-sm">
-    {% if filtered_products %} {% if filtered_products|length == 1 %}
-    1 product in {{ subcategory.subcategory|lower }}
-    {% else %}{{filtered_products|length}} {{ subcategory.subcategory|lower }}
-    {% endif %}{% else %} 0 {{ subcategory.subcategory|lower }}
+<div>
+    <p class="header-stat badge text-secondary m-2 p-2 rounded-3 shadow-sm">
+    {% if search and filtered_products == 1 %}
+        {{ search }} found once in {{ subcategory.subcategory|lower }}
+    {% elif search and filtered_products or search %}
+        {{ search }} found {{ filtered_products|length }} times in {{ subcategory.subcategory|lower }}
+    {% elif not search and filtered_products|length == 1 %}
+        1 product in {{ subcategory.subcategory|lower }}
+    {% elif not search and not filtered_products %}
+        0 {{ subcategory.subcategory|lower }} in Pricer
+    {% else %}
+        {{filtered_products|length}} {{ subcategory.subcategory|lower }} in Pricer
     {% endif %}</p>
-<p><a class="btn btn-md btn-outline-primary mt-3"
+    <!-- https://www.w3schools.com/howto/howto_css_search_button.asp -->
+    <form  class="m-2 input-group">
+        <input type="text" name="search" placeholder="Search product names..." class="form-control"
+            {% if search %} value="{{ search }}" {% endif %}>
+        <button type="submit" class="btn btn-sm btn-outline-success">
+            <i class="fa fa-search form-control"></i></button>
+        <a href="{% url 'prcr:product_list' subcategory.id %}"
+            class="btn btn-sm btn-outline-primary">
+            Refresh</a>
+    </form>
+</div>
+<p><a class="btn btn-md btn-outline-primary mt-3 ms-2"
     href="{% url 'prcr:product_subcategory_create' subcategory.id %}">
-    Add a new product to {{ subcategory|lower }} &raquo;</a></p>
+    Add a new product<br>to {{ subcategory|lower }} &raquo;</a></p>
 {% endblock page_header %}
 
 
 {% block content %}
 {% for product in filtered_products %}
-<section class="product cards p-2 pt-3 m-3 bg-light rounded-3 shadow-sm">
+<section class="product p-2 pt-3 m-3 bg-light rounded-3 shadow-sm">
     <div class="container-fluid d-flex justify-content-between">
-        <div><a href="{% url 'prcr:product_detail' product.id %}" class="link-style">
-            <p>{{ product.product }}
-                {% for brand in brands %}{% if brand.id == product.brand_id %}
-                <span class="small text-muted">({{ brand.brand }})
-                {% endif %}{% endfor %}
-                {% if product_lowest_price_list %}{% for product_id, price in product_lowest_price_list %}
-                {% if product_id == product.id %}
-                &#9679; Lowest price offer ${{ price|intcomma }},
-                {% endif %}{% endfor %}{% endif %}</span></p>
-            <p class="small text-dark">
+        <div><a href="{% url 'prcr:product_detail' product.id %}"
+            class="link-style text-start fs-3 btn">
+            <span class="fs-3"> {{ product.product }} </span>
+            {% for brand in brands %}{% if brand.id == product.brand_id %}
+            <span class="fs-6">({{ brand.brand }})
+            {% endif %}{% endfor %}
+            {% if product_lowest_price_list %}{% for product_id, price in product_lowest_price_list %}
+            {% if product_id == product.id %}
+            &#9679; Lowest price offer ${{ price|intcomma }}
+            {% endif %}{% endfor %}{% endif %}<br>
             {% if feature_list %}{% for feature in feature_list %}{% if feature.product_id == product.id %}
-            {{ feature }} &raquo; {% endif %}{% endfor %}{% endif %}</p></a>
+            {{ feature }} &raquo; {% endif %}{% endfor %}{% endif %}</span></a>
             {% if product.owner_id == user.id %}
-            <p><a class="btn btn-sm btn-outline-secondary mt-1 text-muted"
+            <p><a class="btn btn-sm btn-outline-secondary m-3"
                 href="{% url 'prcr:product_update' product.id %}">
                 Edit this product &raquo;</a></p>
             {% endif %}
         </div>
         {% if product.content_type %}
-        <img class="product-pic rounded-3 me-1"
+        <img class="product-pic rounded-3 m-1"
             src="{% url 'prcr:product_picture' product.id %}">
         {% else %}
         <a href="{% url 'prcr:product_add_image' product.id %}"
-            class="product-no-pic link-style outline-secondary rounded-3 me-1">
-            Add an image</a>
+            class="product-no-pic link-style outline-secondary rounded-3 m-1">
+            Add<br>an<br>image</a>
         {% endif %}
     </div>
 </section>
-{% empty %}
-<section class="section p-3 m-3 bg-light rounded-3">
-    <div class="no-content text-danger">
-        <p>There are no products yet in this subcategory.</p>
+{% endfor %}
+{% if search and not filtered_products %}
+<section class="section no-content p-3 m-3 bg-light rounded-3">
+    <div class="text-danger p-3 m-3">
+        <p class="fs-4">There are no results for your search.</p>
     </div>
 </section>
-{% endfor %}
+{% elif not search and not filtered_products %}
+<section class="section no-content p-3 m-3 bg-light rounded-3">
+    <div class="text-danger p-3 m-3">
+        <p class="fs-4">There are no products yet in this subcategory.<br>You may add one.</p>
+    </div>
+</section>
+{% endif %}
 {% endblock content %}
 
 

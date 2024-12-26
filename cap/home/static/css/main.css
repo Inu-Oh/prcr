@@ -14,12 +14,16 @@ body, .no-bg {
     background-color: #e3e2fd !important;
 }
 
-.main, .section, .cards {
+.main, .section, .cards, .product, .no-content {
     background-color: #e3f2e9 !important;
 }
 
 .product, .no-content {
-    min-height: 133px;
+    min-height: 165px;
+}
+
+.product:hover, .no-content:hover {
+    filter: brightness(0.98);
 }
 
 .cards:hover {
@@ -28,10 +32,15 @@ body, .no-bg {
 
 .link-style {
     color: black !important;
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
-.link-style:hover {
+.muted-link-style {
+    color: lithg-gray !important;
+    text-decoration: none !important;
+}
+
+.link-style:hover, .muted-link-style:hover {
     color: #0000EE !important;
 }
 
@@ -50,13 +59,13 @@ body, .no-bg {
 
 .product-pic {
     float:right;
-    height: 100px;
+    height: 122px;
 }
 
 .product-no-pic {
-    height: 100px;
-    width: 100px;
-    padding: 22px 15px;
+    height: 122px;
+    width: 122px;
+    padding: 22px 22px;
     text-align: center;
     border: 1px dashed gray;
 }
