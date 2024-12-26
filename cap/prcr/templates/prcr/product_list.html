@@ -22,10 +22,9 @@
         <input type="text" name="search" placeholder="Search product names..." class="form-control"
             {% if search %} value="{{ search }}" {% endif %}>
         <button type="submit" class="btn btn-sm btn-outline-success">
-            <i class="fa fa-search form-control"></i></button>
+            <i class="fa fa-search p-2"></i></button>
         <a href="{% url 'prcr:product_list' subcategory.id %}"
-            class="btn btn-sm btn-outline-primary">
-            Refresh</a>
+            class="btn btn-sm btn-outline-primary"><i class="fa fa-undo p-2"></i></a>
     </form>
 </div>
 <p><a class="btn btn-md btn-outline-primary mt-3 ms-2"

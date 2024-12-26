@@ -24,18 +24,21 @@ class CategoryListView(ListView):
 
     def get(self, request):
         category_list = Category.objects.all().order_by('category')
-        category_count = category_list.count()
         subcategory_list = SubCategory.objects.all().order_by('subcategory')
-        subcategory_count = subcategory_list.count()
         product_list = Product.objects.all().order_by('-created_at')
-        product_count = product_list.count()
+
+        # Search
+        strval = request.GET.get("search", False)
+        if strval:
+            query = Q(category__icontains=strval)
+            filtered_list = category_list.filter(query).select_related().distinct()
+        else:
+            filtered_list = category_list
 
         context = {
-            'category_count': category_count,
             'category_list': category_list,
-            'subcategory_count': subcategory_count,
+            'filtered_list': filtered_list,
             'subcategory_list': subcategory_list,
-            'product_count': product_count,
             'product_list': product_list,
             }
         return render(request, self.template_name, context)
