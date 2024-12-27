@@ -4,34 +4,52 @@
 {% block page_header %}
 <h2 class="display-5 text-dark">
     Browse brands</h2>
-<p class="header-stat badge text-secondary mt-3 p-2 rounded-3 shadow-sm">
-    {% if brand_count != 1 %} {{ brand_count }} brands<br><br><br>
-    {% else %} {{ brand_count }} brand<br><br><br>{% endif %}
-    {% if product_count != 1 %} {{ product_count }} products</p>
-    {% else %} {{ product_count }} product</p>{% endif %}
+<div>
+    <p class="header-stat badge text-secondary m-2 p-2 rounded-3 shadow-sm">
+        {% if search %} Your search found {{ filtered_list|length }} categories {% else %}
+        {% if brand_list|length != 1 %} {{ brand_list|length }} brands &nbsp;&raquo;&nbsp;
+        {% else %} {{ brand_list|length }} brand &nbsp;&raquo;&nbsp; {% endif %}
+        {% if product_list|length != 1 %} {{ product_list|length }} products</p>
+        {% else %} {{ product_list|length }} product</p>{% endif %}{% endif %}
+    <!-- https://www.w3schools.com/howto/howto_css_search_button.asp -->
+    <form action="" method="get" class="m-2 input-group">
+        <input type="text" name="search" class="form-control" list="brandList"
+        {% if brand_list %}placeholder="Search for a brand name..."
+        {% else %}placeholder="Nothing to search"{% endif %}>
+        <datalist id="brandList">
+            {% if brand_list %}{% for brand in brand_list %}
+            <option value="{{ brand.brand }}"> {{ brand.brand }} </option>
+            {% endfor %}{% endif %}
+        </datalist>
+        <button type="submit" class="btn btn-sm btn-outline-success">
+            <i class="fa fa-search p-2"></i></button>
+        <a href="{% url 'prcr:main_list' %}" class="btn btn-sm btn-outline-primary">
+            <i class="fa fa-undo p-2"></i></a>
+    </form>
+</div>
 <a class="header-link btn btn-md btn-outline-primary" href="{% url 'prcr:brand_create' %}">
     Add a brand<br> to pricer &raquo;</a>
 {% endblock page_header %}
 
 
 {% block content %}
-{% if brand_list %}
-{% for brand in brand_list %}
-<section class="container-fluid mb-3">
-    <h4 class="heading p-3 m-2 bg-light rounded-3 shadow-sm text-dark d-flex justify-content-between align-items-center">
+{% if filtered_list %}
+{% for brand in filtered_list %}
+<section class="container-fluid mt-3">
+    <h4 class="heading p-3 mt-3 bg-light rounded-3 shadow-sm text-dark d-flex justify-content-between align-items-center">
         {{ brand }}
         <a href="{% url 'prcr:product_brand_create' brand.id %}"
             class="btn btn-sm btn-outline-secondary">
             Add {{ brand.brand }} products &raquo;</a>
     </h4>
 </section>
-<section class="container">
+<section class="container ">
     {% if product_list %}
     <div class="row m-0">
         {% for product in product_list %}
         {% if product.brand.id == brand.id %}
         <a href="{% url 'prcr:product_detail' product.id %}" class="link-style col-md-6">
-            <div class="cards card p-3 row g-0 border rounded-3 overflow-hidden mb-4 shadow-sm h-md-250 position-relative">
+            <div class="cards card p-2 mt-3 row g-0 border rounded-3 overflow-hidden shadow-sm h-md-250 position-relative">
                 <div class="row g-0 card-header flex-md-row">
                     <h5 class="link-style fs-3 text-dark pt-2">
                     {{ product.product }}</h5>
@@ -55,11 +73,17 @@
     {% endif %}
 </section>
 {% endfor %}
-{% else %}
-<section class="section no-content p-1 m-3 bg-light rounded-3">
-    <div class="container-fluid">
-        <p class="p-3 m-2 text-danger">There are no brands yet in Pricer<br>
-            Add categories, subcategories and brands before creating a product</p>
+{% elif brand_list|length == 0%}
+<section class="section no-content p-3 m-3 bg-light rounded-3">
+    <div class="text-danger p-3 m-3">
+        <p class="fs-4">There are no categories yet in Pricer.<br>
+            Add categories, subcategories and brands before creating a product.</p>
+    </div>
+</section>
+{% elif filtered_list|length == 0%}
+<section class="section no-content p-3 m-3 bg-light rounded-3">
+    <div class="text-danger p-3 m-3">
+        <p class="fs-4">There are no results for your search.</p>
     </div>
 </section>
 {% endif %}

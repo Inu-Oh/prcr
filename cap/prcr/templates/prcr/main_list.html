@@ -6,12 +6,13 @@
     Browse<br>categories</h2>
 <div>
 <p class="header-stat badge text-dark m-2 p-2 rounded-3 shadow-sm">
+    {% if search %} Your search found {{ filtered_list|length }} categories {% else %}
     {% if category_list|length != 1 %} {{ category_list|length }} categories &nbsp;&raquo;&nbsp;
     {% else %} {{ category_list|length }} category &nbsp;&raquo;&nbsp; {% endif %}
     {% if subcategory_list|length != 1 %} {{ subcategory_list|length }} subcategories &nbsp;&raquo;&nbsp;
     {% else %} {{ subcategory_list|length }} subcategory &nbsp;&raquo;&nbsp; {% endif %}
     {% if product_list|length != 1 %} {{ product_list|length }} products<p>
-    {% else %} {{ product_list|length }} product</p>{% endif %}
+    {% else %} {{ product_list|length }} product</p>{% endif %}{% endif %}
     <!-- https://www.w3schools.com/howto/howto_css_search_button.asp -->
     <form action="" method="get" class="m-2 input-group">
         <input type="text" name="search" class="form-control" list="categoryList"
@@ -73,11 +74,17 @@
     </div>
 </section>
 {% endfor %}
-{% else %}
-<section class="section no-content p-1 m-3 bg-light rounded-3">
-    <div class="container-fluid">
-        <p class="p-3 m-2 text-danger">There are no categories yet in Pricer.<br>
+{% elif category_list|length == 0%}
+<section class="section no-content p-3 m-3 bg-light rounded-3">
+    <div class="text-danger p-3 m-3">
+        <p class="fs-4">There are no categories yet in Pricer.<br>
             Add categories, subcategories and brands before creating a product.</p>
+    </div>
+</section>
+{% elif filtered_list|length == 0%}
+<section class="section no-content p-3 m-3 bg-light rounded-3">
+    <div class="text-danger p-3 m-3">
+        <p class="fs-4">There are no results for your search.</p>
     </div>
 </section>
 {% endif %}

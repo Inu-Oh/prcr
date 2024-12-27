@@ -40,6 +40,7 @@ class CategoryListView(ListView):
             'filtered_list': filtered_list,
             'subcategory_list': subcategory_list,
             'product_list': product_list,
+            'search': strval,
             }
         return render(request, self.template_name, context)
 
@@ -99,16 +100,23 @@ class BrandListView(ListView):
 
     def get(self, request):
         brand_list = Brand.objects.all().order_by('brand')
-        brand_count = brand_list.count()
         product_list = Product.objects.all().order_by('product')
-        product_count = product_list.count()
         feature_list = Feature.objects.all()
+
+        # Search
+        strval = request.GET.get("search", False)
+        if strval:
+            query = Q(brand__icontains=strval)
+            filtered_list = brand_list.filter(query).select_related().distinct()
+        else:
+            filtered_list = brand_list
+
         context = {
             'brand_list': brand_list,
+            'filtered_list': filtered_list,
             'product_list': product_list,
-            'brand_count': brand_count,
-            'product_count': product_count,
             'feature_list': feature_list,
+            'search': strval,
             }
         return render(request, self.template_name, context)
 
