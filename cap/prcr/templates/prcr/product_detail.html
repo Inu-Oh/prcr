@@ -48,14 +48,34 @@
                 {% if price_list %}
                 <a href="{{ lowest_price.link }}" target="_blank"
                     class="btn btn-md btn-outline-success text-dark text-start mt-3">
-                    <span class="fs-5">Best price ${{ lowest_price.price|intcomma }} &raquo;</span><br>
-                    <span class="text-secondary">{{ lowest_price.domain }}
-                        {{ lowest_price.date_observed|naturalday }}</span></a><br>
+                    <span class="fs-5">Best price ${{ lowest_price.total|intcomma }} &raquo;</span><br>
+                    {% if lowest_price.financing or lowest_price.subscription_fees %}
+                    <span class="btn btn-sm btn-outline-danger text-dark rounded-3 fw-bold">Conditions apply</span>
+                    {% elif lowest_price.tied_sale >= 0.01 %}
+                    <span class="btn btn-sm btn-outline-danger text-dark rounded-3 fw-bold">
+                        Bundle cost: ${{ lowest_price.tied_cost }}</span>
+                    {% elif lowest_price.shipping or lowest_price.hidden_fees %}
+                    <span class="btn btn-sm btn-outline-danger text-dark rounded-3 fw-bold">with shipping or fees</span>
+                    {% elif lowest_price.phony_sale %}
+                    <span class="btn btn-sm btn-outline-danger text-dark rounded-3 fw-bold">Phony sale ads</span>
+                    {% endif %}
+                    &#9679; {{ lowest_price.domain }}
+                    &#9679; {{ lowest_price.date_observed|naturalday }}</a><br>
                 <a href="{{ highest_price.link }}" target="_blank"
                     class="btn btn-md btn-outline-danger text-dark text-start mt-3">
-                    <span class="fs-5">Worst price ${{ highest_price.price|intcomma }} &raquo;</span><br>
-                    <span class="text-secondary">{{ highest_price.domain }}
-                    {{ highest_price.date_observed|naturalday }}</span></a>
+                    <span class="fs-5">Worst price ${{ highest_price.total|intcomma }} &raquo;</span><br>
+                    {% if highest_price.financing or highest_price.subscription_fees %}
+                    <span class="btn btn-sm btn-outline-warning text-dark rounded-3 fw-bold">Conditions apply</span>
+                    {% elif highest_price.tied_sale >= 0.01 %}
+                    <span class="btn btn-sm btn-outline-warning text-dark rounded-3 fw-bold">
+                        Bundle cost: ${{ highest_price.tied_cost }}</span>
+                    {% elif highest_price.shipping or highest_price.hidden_fees %}
+                    <span class="btn btn-sm btn-outline-warning text-dark rounded-3 fw-bold">with shipping or fees</span>
+                    {% elif highest_price.phony_sale %}
+                    <span class="btn btn-sm btn-outline-warning text-dark rounded-3 fw-bold">Phony sale ads</span>
+                    {% endif %}
+                    &#9679; {{ highest_price.domain }}
+                    &#9679; {{ highest_price.date_observed|naturalday }} &raquo;</a>
                 {% else %}<p>Price list is empty{% endif %}</p>
                 <a href="{% url 'prcr:price_create' product.id %}"
                     class="btn btn-sm btn-outline-secondary text-start mb-3">
@@ -88,18 +108,44 @@
                     class="btn btn-sm btn-outline-secondary text-start mb-3">
                     Did you see an offer online? Add a price link &raquo;</a>
                 {% if price_list %}{% for price in price_list %}
-                {% if price.price == lowest_price.price %}
+                {% if price.total == lowest_price.total %}
                 <p><a href="{{ price.link }}" target="_blank"
                     class="btn btn-md btn-outline-success text-dark text-start">
-                    <strong>Best offer &#9679; ${{ price.price|intcomma }}</strong>
+                    <strong>Best offer &#9679; ${{ price.total|intcomma }}</strong>
+                    {% if price.financing or price.subscription_fees %}
+                    &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold">
+                        Conditions apply</span>
+                    {% elif price.tied_sale >= 0.01 %}
+                    &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold">
+                        Bundle cost: ${{ price.tied_cost }}</span>
+                    {% elif price.shipping or price.hidden_fees %}
+                    &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold">
+                        with shipping or fees</span>
+                    {% elif price.phony_sale %}
+                    &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold">
+                        Fake savings claim</span>
+                    {% endif %}
                     &#9679; {{ price.domain }}
-                    &#9679; {{ price.natural_date_observed }} </a></p>
+                    &#9679; {{ price.natural_date_observed }} &raquo;</a></p>
                 {% else %}
                 <p><a href="{{ price.link }}" class="btn btn-sm btn-outline-dark text-start"
                     target="_blank">
-                    <strong>${{ price.price|intcomma }}</strong>
+                    <strong>${{ price.total|intcomma }}</strong>
+                    {% if price.financing or price.subscription_fees %}
+                    &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold">
+                        Conditions apply</span>
+                    {% elif price.tied_sale >= 0.01 %}
+                    &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold"
+                    >Bundle cost: ${{ price.tied_cost }}</span>
+                    {% elif price.shipping or price.hidden_fees %}
+                    &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold">
+                        with shipping or fees</span>
+                    {% elif price.phony_sale %}
+                    &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold">
+                        Fake savings claim</span>
+                    {% endif %}
                     &#9679; {{ price.domain }}
-                    &#9679; {{ price.natural_date_observed }} </a></p>
+                    &#9679; {{ price.natural_date_observed }} &raquo;</a></p>
                 {% endif %}{% endfor %}{% endif %}
             </div>
             <div class="col-6" id="comments">

@@ -43,9 +43,9 @@
             {% for brand in brands %}{% if brand.id == product.brand_id %}
             <span class="fs-6">({{ brand.brand }})
             {% endif %}{% endfor %}
-            {% if product_lowest_price_list %}{% for product_id, price in product_lowest_price_list %}
+            {% if product_lowest_price_list %}{% for product_id, total_price in product_lowest_price_list %}
             {% if product_id == product.id %}
-            &#9679; Lowest price offer ${{ price|intcomma }}
+            &#9679; Lowest price offer ${{ total_price|intcomma }}
             {% endif %}{% endfor %}{% endif %}<br>
             {% if feature_list %}{% for feature in feature_list %}{% if feature.product_id == product.id %}
             {{ feature }} &raquo; {% endif %}{% endfor %}{% endif %}</span></a>

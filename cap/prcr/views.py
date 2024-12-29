@@ -185,7 +185,19 @@ class ProductListView(ListView):
         subcategory = SubCategory.objects.get(id=pk)
         brands = Brand.objects.all()
         feature_list = Feature.objects.all()
-        price_list = Price.objects.all().order_by('-advertised_price') # order for lowest price last
+        price_list = Price.objects.all() # order for lowest price last
+
+        # Reorder the price above by total
+        if price_list:
+            for price in price_list:
+                price.natural_date_observed = naturalday(price.date_observed)
+                # Determine the final price of product before fees
+                final_price = max(price.advertised_price, price.higher_price_at_checkout, price.overcharge)
+                # Add all fees
+                total_price = final_price + price.shipping + price.hidden_fees
+                price.total = total_price
+                price.save()
+            price_list.order_by('-total')
 
         # Search
         strval = request.GET.get("search", False)
@@ -205,11 +217,11 @@ class ProductListView(ListView):
             for price in price_list:
                 price_product_id = str(price.product.id)
                 if price_product_id == product_id: # last price saved is lowest
-                    pruduct_lowest_price_dict[product_id] = price.advertised_price
+                    pruduct_lowest_price_dict[product_id] = price.total
         product_lowest_price_list = []
         # Transform it into an accessible list of lowest price tuples
-        for product_id, price in pruduct_lowest_price_dict.items():
-            product_lowest_price_list.append((int(product_id), price))
+        for product_id, total_price in pruduct_lowest_price_dict.items():
+            product_lowest_price_list.append((int(product_id), total_price))
 
         context = {
             'filtered_products': filtered_products,
@@ -235,16 +247,22 @@ class ProductDetailView(DetailView):
         price_list = Price.objects.filter(product_id=pk)
         price_list = price_list.order_by('-date_observed')
 
-        # Add a total price to all prices and set up price dates and short links
+        # Calculate price total, tied sale and find highest and lowest prices
         if price_list:
             for price in price_list:
                 price.natural_date_observed = naturalday(price.date_observed)
-                # Determine the final price of product
-                # Add any fees
-            highest_price = price_list.latest('advertised_price')
+                # Determine the final price of product before fees
+                final_price = max(price.advertised_price, price.higher_price_at_checkout, price.overcharge)
+                # Add all fees
+                total_price = final_price + price.shipping + price.hidden_fees
+                tied_sale_price = total_price + price.tied_sale
+                price.total = total_price
+                price.tied_cost = tied_sale_price
+                price.save()
+            highest_price = price_list.latest('total')
             high_price_dom = urlparse(highest_price.link).netloc
             highest_price.domain = '.'.join(high_price_dom.split('.')[-2:])
-            lowest_price = price_list.earliest('advertised_price')
+            lowest_price = price_list.earliest('total')
             low_price_dom = urlparse(lowest_price.link).netloc
             lowest_price.domain = '.'.join(low_price_dom.split('.')[-2:])
         else:
@@ -254,9 +272,9 @@ class ProductDetailView(DetailView):
         # Set up price chart data
         if highest_price:
             price_dates = [price.date_observed for price in price_list]
-            prices = [price.advertised_price for price in price_list]
-            if highest_price.advertised_price != lowest_price.advertised_price:
-                scale = [-int((price.advertised_price - lowest_price.advertised_price)/(highest_price.advertised_price - lowest_price.advertised_price) * 10) + 10 for price in price_list]
+            prices = [price.total for price in price_list]
+            if highest_price.total != lowest_price.total:
+                scale = [-int((price.total - lowest_price.total)/(highest_price.total- lowest_price.total) * 10) + 10 for price in price_list]
             else:
                 scale = [5]
             dot_size = [val if val > 3 else 3 for val in scale]
@@ -265,7 +283,7 @@ class ProductDetailView(DetailView):
             def format_currency(amount):
                 return '${:,.2f}'.format(amount)
             for price in price_list:
-                hover_text = "<b>" + format_currency(price.price) + "</b><br>" + price.natural_date_observed + "<br>"
+                hover_text = "<b>" + format_currency(price.total) + "</b><br>" + price.natural_date_observed + "<br>"
                 domain = urlparse(price.link).netloc
                 hover_text += '.'.join(domain.split('.')[-2:])
                 hover_texts.append(hover_text)

@@ -126,12 +126,19 @@ class Price(models.Model):
         validators=[MinValueValidator(Decimal('0.01'))],
         help_text="The initial price you saw for the product"
     )
+    shipping = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.00'))],
+        default=0.0,
+        help_text="Added cost for shipping."
+    )
     hidden_fees = models.DecimalField(
         max_digits=7,
         decimal_places=2,
         validators=[MinValueValidator(Decimal('0.00'))],
         default=0.0,
-        help_text="Fees added to the advertised price before checkout"
+        help_text="Fees added to the advertised price before checkout, except shipping."
     )
     higher_price_at_checkout = models.DecimalField(
         max_digits=8,
@@ -152,10 +159,26 @@ class Price(models.Model):
         decimal_places=2,
         validators=[MinValueValidator(Decimal('0.00'))],
         default=0.0,
-        help_text="Tied sale. Add the price of other products you had to buy in order to get the product at advertised price."
+        help_text="Add the price of other products you had to buy in order to get the product at advertised price."
+        )
+    total = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.00'))],
+        default=0.0,
+        help_text="Total cost of final product price and all fees."
+        )
+    tied_cost = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.00'))],
+        default=0.0,
+        help_text="Cost of buying all bundled products."
         )
     financing = models.BooleanField(default=False,
         help_text="Must buy financing to get product at advertised price.")
+    subscription_fees = models.BooleanField(default=False,
+        help_text="Price is conditional on subscription or subscription fees may apply.")
     phony_sale = models.BooleanField(default=False,
         help_text="The store lied about how much you saved on the product.")
 
@@ -171,7 +194,7 @@ class Price(models.Model):
     updated_at = models.DateField(auto_now=True)
 
     def __str__(self) -> str:
-        price_str = str(self.price) + " (on " + str(self.date_observed) + ")"
+        price_str = str(self.advertised_price) + " (on " + str(self.date_observed) + ")"
         return price_str
 
 

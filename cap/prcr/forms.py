@@ -19,6 +19,7 @@ class PriceCreateForm(forms.ModelForm):
         model = Price
         fields = [
             'advertised_price',
+            'shipping',
             'hidden_fees',
             'higher_price_at_checkout',
             'overcharge',
