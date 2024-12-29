@@ -17,7 +17,17 @@ class FeatureCreateForm(forms.ModelForm):
 class PriceCreateForm(forms.ModelForm):
     class Meta:
         model = Price
-        fields = ['price', 'link']
+        fields = [
+            'advertised_price',
+            'hidden_fees',
+            'higher_price_at_checkout',
+            'overcharge',
+            'tied_sale',
+            'financing',
+            'phony_sale',
+            'comments',
+            'link'
+        ]
 
 
 class SubcategoryCreateForm(forms.ModelForm):

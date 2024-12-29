@@ -1,7 +1,9 @@
 from django.db import models
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, MinValueValidator
 # from django.contrib.auth.models import User
 from django.conf import settings
+
+from decimal import Decimal
 
 # from taggit.managers import TaggableManageer # need to install and add to settings
 
@@ -118,8 +120,49 @@ class Comment(models.Model):
 
 
 class Price(models.Model):
-    price = models.DecimalField(max_digits=8, decimal_places=2)
+    advertised_price = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.01'))],
+        help_text="The initial price you saw for the product"
+    )
+    hidden_fees = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.00'))],
+        default=0.0,
+        help_text="Fees added to the advertised price before checkout"
+    )
+    higher_price_at_checkout = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.00'))],
+        default=0.0,
+        help_text="The price charged at checkout, if it was higher. Leave 0.0 otherwise. Don't apply hidden fees."
+    )
+    overcharge = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.00'))],
+        default=0.0,
+        help_text="The overcharge price on your card, if higher than at checkout. Leave 0.0 otherwise. Don't apply hidden fees."
+    )
+    tied_sale = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.00'))],
+        default=0.0,
+        help_text="Tied sale. Add the price of other products you had to buy in order to get the product at advertised price."
+        )
+    financing = models.BooleanField(default=False,
+        help_text="Must buy financing to get product at advertised price.")
+    phony_sale = models.BooleanField(default=False,
+        help_text="The store lied about how much you saved on the product.")
+
+    comments = models.CharField(max_length=128, blank=True,
+        help_text="Describe any misleading pricing claims.")
     link = models.URLField(max_length=256)
+
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="price_product")
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL,
         related_name="price_owner")

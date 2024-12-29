@@ -105,7 +105,7 @@ WSGI_APPLICATION = "cap.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'EthanolMace$default',
+        'NAME': 'EthanolMace$pricer',
         'USER': 'EthanolMace',
         'PASSWORD': 'm-aREc8mV;"QPiz',
         'HOST': 'EthanolMace.mysql.pythonanywhere-services.com',
