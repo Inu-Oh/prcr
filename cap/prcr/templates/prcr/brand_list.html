@@ -2,6 +2,7 @@
 
 
 {% block page_header %}
+{% load humanize %}
 <h2 class="display-5 text-dark">
     Browse brands</h2>
 <div>
@@ -52,11 +53,15 @@
             <div class="cards card p-2 mt-3 row g-0 border rounded-3 overflow-hidden shadow-sm h-md-250 position-relative">
                 <div class="row g-0 card-header flex-md-row">
                     <h5 class="link-style fs-3 text-dark pt-2">
-                    {{ product.product }}</h5>
+                    {{ product.product }}
+                    {% if product_lowest_price_list %}{% for product_id, total_price in product_lowest_price_list %}
+                    {% if product_id == product.id %}
+                    <span class="fs-6"> &#9679; best price ${{ total_price|intcomma }} </span></h5>
+                    {% endif %}{% endfor %}{% endif %}
                     </div>
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <p class="card-text mb-auto text-muted text-small">
-                        {% if feature_list %} <span class="text-muted">&#9679;</span>
+                        {% if feature_list %} <span class="text-muted"></span>
                         {% for feature in feature_list %}{% if feature.product.id == product.id %}
                         {{ feature }} &raquo;
                         {% endif %}{% endfor %}{% endif %}
@@ -91,5 +96,4 @@
 
 
 {% block footer %}
-    <p>Copyright or something</p>
 {% endblock footer %}

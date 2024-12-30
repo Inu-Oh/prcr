@@ -100,8 +100,21 @@ class BrandListView(ListView):
 
     def get(self, request):
         brand_list = Brand.objects.all().order_by('brand')
-        product_list = Product.objects.all().order_by('product')
+        product_list = Product.objects.all()
         feature_list = Feature.objects.all()
+        price_list = Price.objects.all()
+
+        # Reorder the price list by total price
+        if price_list:
+            for price in price_list:
+                price.natural_date_observed = naturalday(price.date_observed)
+                # Determine the final price of product before fees
+                final_price = max(price.advertised_price, price.higher_price_at_checkout, price.overcharge)
+                # Add all fees
+                total_price = final_price + price.shipping + price.hidden_fees
+                price.total = total_price
+                price.save()
+            price_list.order_by('-total')
 
         # Search
         strval = request.GET.get("search", False)
@@ -111,12 +124,26 @@ class BrandListView(ListView):
         else:
             filtered_list = brand_list
 
+        # Get the lowest price for each product into a dictionary
+        pruduct_lowest_price_dict = {}
+        for product in product_list:
+            product_id = str(product.id)
+            for price in price_list:
+                price_product_id = str(price.product.id)
+                if price_product_id == product_id: # last price saved is lowest
+                    pruduct_lowest_price_dict[product_id] = price.total
+        # Transform it into an accessible list of lowest price tuples
+        product_lowest_price_list = []
+        for product_id, total_price in pruduct_lowest_price_dict.items():
+            product_lowest_price_list.append((int(product_id), total_price))
+
         context = {
             'brand_list': brand_list,
             'filtered_list': filtered_list,
             'product_list': product_list,
             'feature_list': feature_list,
             'search': strval,
+            'product_lowest_price_list': product_lowest_price_list
             }
         return render(request, self.template_name, context)
 
@@ -187,7 +214,7 @@ class ProductListView(ListView):
         feature_list = Feature.objects.all()
         price_list = Price.objects.all() # order for lowest price last
 
-        # Reorder the price above by total
+        # Reorder the price list by total price
         if price_list:
             for price in price_list:
                 price.natural_date_observed = naturalday(price.date_observed)
