@@ -109,7 +109,7 @@
                     Did you see an offer online? Add a price link &raquo;</a>
                 {% if price_list %}{% for price in price_list %}
                 {% if price.total == lowest_price.total %}
-                <button type="button" data-bs-toggle="modal" data-bs-target="#priceModal"
+                <button type="button" data-bs-toggle="modal" data-bs-target="#bestPriceModal"
                     class="btn btn-md btn-outline-success text-dark text-start">
                     <strong>Best offer &#9679; ${{ price.total|intcomma }}</strong>
                     {% if price.financing or price.subscription_fees %}
@@ -128,15 +128,21 @@
                     {{ price.domain }}
                     &#9679; {{ price.natural_date_observed }} &raquo;
                 </button>
-                <div class="modal" id="priceModal" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
+                <div class="modal" id="bestPriceModal" tabindex="-1" aria-labelledby="bestPriceModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Modal title</h5>
+                                <h2 class="modal-title">Best total price &#9679; ${{ price.total }}<br>
+                                <span class="fs-5">on
+                                <a href="{{price.link}}" class="link-style">{{ price.domain }}</a>
+                                &#9679; {{ price.natural_date_observed }}</span></h2>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <p>Modal body text goes here.</p>
+                                <h4>Advertised price &#9679; ${{ price.advertised_price }}</h4>
+                                {% if price.phony_sale %}
+                                <p class="text-danger fw-bold">Phony savings claim reported for this price</p>{% endif %}
+
                             </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
