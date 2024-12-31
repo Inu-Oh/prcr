@@ -109,7 +109,7 @@
                     Did you see an offer online? Add a price link &raquo;</a>
                 {% if price_list %}{% for price in price_list %}
                 {% if price.total == lowest_price.total %}
-                <p><a href="{{ price.link }}" target="_blank"
+                <button type="button" data-bs-toggle="modal" data-bs-target="#priceModal"
                     class="btn btn-md btn-outline-success text-dark text-start">
                     <strong>Best offer &#9679; ${{ price.total|intcomma }}</strong>
                     {% if price.financing or price.subscription_fees %}
@@ -124,9 +124,27 @@
                     {% elif price.phony_sale %}
                     &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold">
                         Fake savings claim</span>
-                    {% endif %}
-                    &#9679; {{ price.domain }}
-                    &#9679; {{ price.natural_date_observed }} &raquo;</a></p>
+                    {% endif %}<br>
+                    {{ price.domain }}
+                    &#9679; {{ price.natural_date_observed }} &raquo;
+                </button>
+                <div class="modal" id="priceModal" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Modal title</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Modal body text goes here.</p>
+                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Edit</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
                 {% else %}
                 <p><a href="{{ price.link }}" class="btn btn-sm btn-outline-dark text-start"
                     target="_blank">
@@ -143,8 +161,8 @@
                     {% elif price.phony_sale %}
                     &#9679; <span class="btn btn-sm btn-outline-danger rounded-3 text-dark fw-bold">
                         Fake savings claim</span>
-                    {% endif %}
-                    &#9679; {{ price.domain }}
+                    {% endif %}<br>
+                    {{ price.domain }}
                     &#9679; {{ price.natural_date_observed }} &raquo;</a></p>
                 {% endif %}{% endfor %}{% endif %}
             </div>
