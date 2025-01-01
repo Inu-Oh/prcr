@@ -1,4 +1,4 @@
-from prcr.forms import CommentForm, FeatureCreateForm, PriceCreateForm, ProductBrandCreateForm, ProductAddImageForm, ProductSubcategoryCreateForm, ProductUpdateForm, SubcategoryCreateForm
+from prcr.forms import CommentForm, FeatureCreateForm, PriceForm, ProductBrandCreateForm, ProductAddImageForm, ProductSubcategoryCreateForm, ProductUpdateForm, SubcategoryCreateForm
 from prcr.models import Brand, Category, Comment, Feature, Price, Product, SubCategory
 from prcr.owner import OwnerDeleteView
 
@@ -183,13 +183,13 @@ class PriceCreateView(LoginRequiredMixin, View):
     template_name = 'prcr/price_form.html'
 
     def get(self, request, pk):
-        form = PriceCreateForm()
+        form = PriceForm()
         prod = Product.objects.get(id=pk)
         context = { 'form': form, 'product': prod }
         return render(request, self.template_name, context)
 
     def post(self, request, pk):
-        form = PriceCreateForm(request.POST)
+        form = PriceForm(request.POST)
         prod = Product.objects.get(id=pk)
 
         if not form.is_valid():
@@ -202,6 +202,28 @@ class PriceCreateView(LoginRequiredMixin, View):
         price.product = prod
         price.save()
         success_url = reverse_lazy('prcr:product_detail', kwargs={'pk': prod.id})
+        return redirect(success_url)
+
+
+class PriceUpdateView(LoginRequiredMixin, View):
+    template_name = 'prcr/price_update_form.html'
+
+    def get(self, request, pk):
+        price = Price.objects.get(id=pk)
+        form = PriceForm(instance=price)
+        context = { 'form': form, 'price': price }
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        price = get_object_or_404(Price, id=pk, owner=self.request.user)
+        form = PriceForm(request.POST, instance=price)
+
+        if not form.is_valid():
+            context = { 'form': form, 'price': price }
+            return render(request, self.template_name, context)
+
+        form.save()
+        success_url = reverse_lazy('prcr:product_detail', kwargs={'pk': price.product.id})
         return redirect(success_url)
 
 

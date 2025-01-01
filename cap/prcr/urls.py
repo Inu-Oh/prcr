@@ -34,8 +34,9 @@ urlpatterns = [
     # Feature create view
     path('product/<int:pk>/new_feature', views.FeatureCreateView.as_view(), name='feature_create'),
 
-    # Price create view
+    # Price create & update view
     path('product/<int:pk>/new_price', views.PriceCreateView.as_view(), name='price_create'),
+    path('update_price/<int:pk>', views.PriceUpdateView.as_view(), name='price_update'),
 
     # Product picture view
     path('picture/<int:pk>', views.stream_file, name='product_picture'),

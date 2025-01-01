@@ -14,7 +14,7 @@ class FeatureCreateForm(forms.ModelForm):
         fields = ['feature']
 
 
-class PriceCreateForm(forms.ModelForm):
+class PriceForm(forms.ModelForm):
     class Meta:
         model = Price
         fields = [
@@ -25,6 +25,7 @@ class PriceCreateForm(forms.ModelForm):
             'overcharge',
             'tied_sale',
             'financing',
+            'subscription_fees',
             'phony_sale',
             'comments',
             'link'
