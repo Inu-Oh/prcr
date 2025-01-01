@@ -131,41 +131,60 @@
                 <div class="modal" id="bestPriceModal" tabindex="-1" aria-labelledby="bestPriceModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <div class="modal-title container-fluid p-1 d-flex justify-content-around">
-                                    <h2>Best total price</h2> <h2>${{ price.total }}</h2> </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="modal-header heading">
+                                <h2>Best total price</h2> <h2>${{ price.total }}</h2>
                             </div>
-                            <div class="modal-body"><p class="fs-6">on
-                                <a href="{{price.link}}" class="link-style">{{ price.domain }}</a>
-                                    &#9679; confirmed {{ price.natural_date_observed }}</p>
-                                <p class="fs-4">Advertised price</span><span class="right">${{ price.advertised_price }}</span></h4>
-                                {% if price.phony_sale %}
-                                    <p class="text-danger fw-bold">Phony savings claim reported for this price</p>{% endif %}
-                                {% if price.financing %}
-                                    <p class="text-danger fw-bold">Must pay for financing to get this price</p>{% endif %}
-                                {% if price.subscription_fees %}<p class="text-danger fw-bold">
-                                    Must become a member and / or pay subscription fees</p>{% endif %}
-                                {% if price.shipping %}<p class=""><span class="left">
-                                    Shipping may apply</span><span class="right">${{ price.shipping }}</span></p>{% endif %}
-                                {% if price.hidden_fees %}<p class=""><span class="left">
-                                    Hidden fees</span><span class="right"> ${{ price.hidden_fees }}</span></p>{% endif %}
-                                {% if price.higher_price_at_checkout %}<p class=""><span class="left">
-                                    Price at checkout</span><span class="right">${{ price.higher_price_at_checkout }}</span></p>{% endif %}
-                                {% if price.overcharge %}<p class=""><span class="left">
-                                    Overcharge on card</span><span class="right">${{ price.overcharge }}</span></p>{% endif %}
-                                {% if price.tied_sale %}<p class="text-muted fs-6"><span class="left">
-                                Tied product price</span><span class="right">${{ price.tied_sale }}</span></p>
-                                <p class=""><span class="left">Total for all products</span>
-                                    <span class="right"> ${{ price.tied_cost}}</span></p>{% endif %}
-                                <p class="fs-4 fw-bold"><span class="left">Reported final price</span>
-                                    <span class="right"> ${{ price.total }}</span></p>
-                                <p>Comments: {{ price.comments }}</p>
+                            <div class="modal-body section">
+                                <div class="d-flex justify-content-between rounded-3">
+                                    <p class="fs-6 mt-1">Price was confirmed {{ price.natural_date_observed }}</p>
+                                    <p><a href="{{ price.link }}" class="btn btn-sm btn-outline-success">
+                                        Buy now on {{ price.domain }}</a></p>
+                                </div>
+                                <div class="container-fluid d-flex justify-content-between fs-4">
+                                    <h4>Advertised price</h4> <h4>${{ price.advertised_price }}</h4>
+                                </div>
+                                {% if price.phony_sale %}<p class="text-danger">
+                                    Phony savings claim reported for this price</p>{% endif %}
+                                {% if price.financing %}<p class="text-danger">
+                                    Must pay for financing to get this price</p>{% endif %}
+                                {% if price.subscription_fees %}<p class="text-danger">
+                                    Must become a member or pay subscription fees to get this price</p>{% endif %}
+                                {% if price.shipping %}
+                                <div class="container-fluid d-flex justify-content-between">
+                                    <p>Shipping may apply &#9679; starting</p> <p>${{ price.shipping }}</p>
+                                </div>{% endif %}
+                                {% if price.hidden_fees %}
+                                <div class="container-fluid d-flex justify-content-between">
+                                    <p>Hidden fees</p> <p>${{ price.hidden_fees }}</p>
+                                </div>{% endif %}
+                                {% if price.higher_price_at_checkout %}
+                                <div class="container-fluid d-flex justify-content-between">
+                                    <p>Price at checkout</p> <p>${{ price.higher_price_at_checkout }}</p>
+                                </div>{% endif %}
+                                {% if price.overcharge %}
+                                <div class="container-fluid d-flex justify-content-between">
+                                    <p>Overcharge on card</p> <p>${{ price.overcharge }}</p>
+                                </div>{% endif %}
+
+                                {% if price.tied_sale %}
+                                <div class="container-fluid d-flex justify-content-between">
+                                    <p>Tied product price</p> <p>${{ price.tied_sale }}</p>
+                                </div>
+                                <div class="container-fluid d-flex justify-content-between fs-4">
+                                    <p>Total for all products</p> <p>${{ price.tied_cost}}</p>
+                                </div>{% endif %}
+                                <div class="container-fluid d-flex justify-content-between fs-4">
+                                    <p class="fs-4">Final product price</p> <p> ${{ price.total }}</p>
+                                </div>
+                                {% if price.comments %}
+                                <div>
+                                <h5>Learn more about the price offer</h5><p>{{ price.comments }}</p>
+                                </div>{% endif %}
                             </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="modal-footer footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                             {% if price.owner_id == user.id %}
-                            <a href="{% url 'prcr:price_update' price.id %}" class="btn btn-primary">Edit</a>{% endif %}
+                            <a href="{% url 'prcr:price_update' price.id %}" class="btn btn-outline-primary">Edit</a>{% endif %}
                         </div>
                         </div>
                     </div>
