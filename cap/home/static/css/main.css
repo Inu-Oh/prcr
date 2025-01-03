@@ -41,7 +41,8 @@ body, .no-bg {
 }
 
 .link-style:hover, .muted-link-style:hover {
-    color: #0000EE !important;
+    color: orangered !important;
+    text-shadow: 0 0 3px hotpink !important;
 }
 
 .header-stat {
