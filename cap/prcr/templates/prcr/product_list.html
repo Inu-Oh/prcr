@@ -5,7 +5,7 @@
 {% load humanize %}
 <h2 class="display-5 text-dark"> {{ subcategory.subcategory }} </h2>
 <div>
-    <p class="header-stat badge text-secondary m-2 p-2 rounded-3 shadow-sm">
+    <p class="header-stat badge text-dark m-2 p-2 rounded-3 shadow">
     {% if search and filtered_products == 1 %}
         {{ search }} found once in {{ subcategory.subcategory|lower }}
     {% elif search and filtered_products or search %}
@@ -21,13 +21,13 @@
     <form  class="m-2 input-group">
         <input type="text" name="search" placeholder="Search product names..." class="form-control"
             {% if search %} value="{{ search }}" {% endif %}>
-        <button type="submit" class="btn btn-sm btn-outline-success">
+        <button type="submit" class="btn btn-sm btn-success">
             <i class="fa fa-search p-2"></i></button>
         <a href="{% url 'prcr:product_list' subcategory.id %}"
-            class="btn btn-sm btn-outline-primary"><i class="fa fa-undo p-2"></i></a>
+            class="btn btn-sm btn-outline-dark"><i class="fa fa-undo p-2"></i></a>
     </form>
 </div>
-<p><a class="btn btn-md btn-outline-primary mt-3 ms-2"
+<p><a class="btn btn-md btn-outline-dark mt-3 ms-2"
     href="{% url 'prcr:product_subcategory_create' subcategory.id %}">
     Add a new product<br>to {{ subcategory|lower }} &raquo;</a></p>
 {% endblock page_header %}
@@ -35,7 +35,7 @@
 
 {% block content %}
 {% for product in filtered_products %}
-<section class="product p-2 pt-3 m-3 bg-light rounded-3 shadow-sm">
+<section class="product p-2 pt-3 m-3 bg-light rounded-3 shadow">
     <div class="container-fluid d-flex justify-content-between">
         <div><a href="{% url 'prcr:product_detail' product.id %}"
             class="link-style text-start fs-3 btn">

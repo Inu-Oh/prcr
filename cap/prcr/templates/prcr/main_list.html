@@ -5,7 +5,7 @@
 <h2 class="display-5 text-dark">
     Browse<br>categories</h2>
 <div>
-<p class="header-stat badge text-dark m-2 p-2 rounded-3 shadow-sm">
+<p class="header-stat badge text-dark m-2 p-2 rounded-3 shadow">
     {% if search %} Your search found {{ filtered_list|length }} categories {% else %}
     {% if category_list|length != 1 %} {{ category_list|length }} categories &nbsp;&raquo;&nbsp;
     {% else %} {{ category_list|length }} category &nbsp;&raquo;&nbsp; {% endif %}
@@ -23,13 +23,13 @@
             <option value="{{ category.category }}"> {{ category.category }} </option>
             {% endfor %}{% endif %}
         </datalist>
-        <button type="submit" class="btn btn-sm btn-outline-success">
+        <button type="submit" class="btn btn-sm btn-success">
             <i class="fa fa-search p-2"></i></button>
-        <a href="{% url 'prcr:main_list' %}" class="btn btn-sm btn-outline-primary">
+        <a href="{% url 'prcr:main_list' %}" class="btn btn-sm btn-outline-dark">
             <i class="fa fa-undo p-2"></i></a>
     </form>
 </div>
-<a class="header-link btn btn-md btn-outline-primary"
+<a class="header-link btn btn-md btn-outline-dark"
     href="{% url 'prcr:category_create' %}">
     Add a category<br>to Pricer &raquo;</a>
 {% endblock page_header %}
@@ -40,10 +40,10 @@
 {% for category in filtered_list %}
 <section class="no-bg p-1 m-3 bg-light rounded-3">
     <div class="container-fluid">
-        <h4 class="heading p-3 mb-3 bg-light rounded-3 shadow-sm text-dark d-flex justify-content-between align-items-center">
+        <h4 class="heading p-3 mb-3 bg-light rounded-3 shadow text-dark d-flex justify-content-between align-items-center">
         {{ category.category }}
         <a href="{% url 'prcr:subcategory_create' category.id %}"
-            class="btn btn-sm btn-outline-secondary">
+            class="btn btn-sm btn-outline-dark">
             Add a subcategory to {{ category.category|lower }} &raquo;</a></h4>
         {% if subcategory_list %}
         <ul>
@@ -51,7 +51,7 @@
             {% if subcategory.category.id == category.id %}
             <li class="plain-list">
                 <a href="{% url 'prcr:product_list' subcategory.id %}" class="link-style">
-                    <div class="cards p-2 mb-3 rounded 3 shadow-sm text-small">
+                    <div class="cards p-2 mb-3 rounded 3 shadow text-small">
                     <strong>{{ subcategory.subcategory }}</strong>
                     {% if product_list %}<span class="text-muted">
                         {% for product in product_list %}

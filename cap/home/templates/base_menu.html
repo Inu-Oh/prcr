@@ -3,7 +3,7 @@
 {% load app_tags %} <!-- see home/templatetags/app_tags.py -->
 
 {% block navbar %}
-<nav class="nav p-2 m-2 navbar navbar-expand-sm navbar-light bg-light rounded-3 shadow-sm">
+<nav class="nav p-2 m-2 navbar navbar-expand-sm navbar-light bg-light rounded-3 shadow">
     <div class="container-fluid">
         {% url 'prcr:main_list' as x %}
         <a class="navbar-brand link-style" href="{{ x }}">Pricer</a>

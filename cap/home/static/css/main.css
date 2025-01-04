@@ -1,18 +1,18 @@
 :root {
-    --inuOhSky:#d9e5eb;
-    --inuOhKimono:#efa7aa;
+    --inuOhSky:#f3f4f8;
+    --inuOhKimono:#e4625b;
     --inuOhHair:#62aeb1;
     --inuOhYukata:#fdf7d2;
     --inuOhFan:#edc23a;
-    --inuOhDrum:#ddd5c1;
+    --inuOhDrum:#ae9b87;
     --inuOhHat:#80999c;
 }
 
 body, .no-bg {
-    background-color: var(--inuOhKimono) !important;
+    background-color: var(--inuOhDrum) !important;
 }
 
-.nav {
+.nav, .footer {
     background-color: var(--inuOhHair) !important;
 }
 
@@ -20,8 +20,8 @@ body, .no-bg {
     width: 39px;
 }
 
-.header, .footer, .heading {
-    background-color: var(--inuOhYukata) !important;
+.header, .heading {
+    background-color: var(--inuOhKimono) !important;
 }
 
 .main, .section, .cards, .product, .no-content {
@@ -106,7 +106,7 @@ body, .no-bg {
 #product-profile-no-pic {
     width: 100%;
     height: 100%;
-    background-color: var(--inuOhDrum);
+    background-color: var(--inuOhYukata);
 }
 
 #product-profile-no-pic:hover {
@@ -122,7 +122,7 @@ body, .no-bg {
 }
 
 #price-history {
-    background-color: var(--inuOhDrum) !important;
+    background-color: var(--inuOhYukata) !important;
 }
 
 #comments {
