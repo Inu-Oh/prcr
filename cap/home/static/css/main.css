@@ -1,9 +1,19 @@
+:root {
+    --inuOhSky:#d9e5eb;
+    --inuOhKimono:#efa7aa;
+    --inuOhHair:#62aeb1;
+    --inuOhYukata:#fdf7d2;
+    --inuOhFan:#edc23a;
+    --inuOhDrum:#ddd5c1;
+    --inuOhHat:#80999c;
+}
+
 body, .no-bg {
-    background-color: #f7f6fd !important;
+    background-color: var(--inuOhKimono) !important;
 }
 
 .nav {
-    background-color: #e3f2fd !important;
+    background-color: var(--inuOhHair) !important;
 }
 
 #gravatar {
@@ -11,11 +21,11 @@ body, .no-bg {
 }
 
 .header, .footer, .heading {
-    background-color: #e3e2fd !important;
+    background-color: var(--inuOhYukata) !important;
 }
 
 .main, .section, .cards, .product, .no-content {
-    background-color: #e3f2e9 !important;
+    background-color: var(--inuOhSky) !important;
 }
 
 .product, .no-content {
@@ -36,7 +46,7 @@ body, .no-bg {
 }
 
 .muted-link-style {
-    color: lithg-gray !important;
+    color: light-gray !important;
     text-decoration: none !important;
 }
 
@@ -46,7 +56,7 @@ body, .no-bg {
 }
 
 .header-stat {
-    background-color: #e3e9fd;
+    background-color: var(--inuOhFan);
 }
 
 .header-link {
@@ -73,7 +83,7 @@ body, .no-bg {
 
 .product-no-pic:hover {
     border: 2px dashed hotpink;
-    background-color: #ddd !important;
+    background-color: var(--inuOhHat) !important;
 }
 
 .plain-list {
@@ -96,11 +106,11 @@ body, .no-bg {
 #product-profile-no-pic {
     width: 100%;
     height: 100%;
-    background-color: #dedede;
+    background-color: var(--inuOhDrum);
 }
 
 #product-profile-no-pic:hover {
-    background-color: #797979;
+    background-color: var(--inuOhHat);
 }
 
 #overlay {
@@ -112,7 +122,7 @@ body, .no-bg {
 }
 
 #price-history {
-    background-color: #e3f2eb !important;
+    background-color: var(--inuOhDrum) !important;
 }
 
 #comments {
