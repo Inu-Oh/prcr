@@ -339,7 +339,7 @@
                 {% endif %}
                 {% if comments %}{% for comment in comments %}
                 <p> {{ comment.text }}
-                <span class="fs-6 text-muted">(posted {{ comment.updated_at|naturaltime }}
+                <span class="fs-6 small text-muted"><br>(posted {{ comment.updated_at|naturaltime }}
                     by {{ comment.owner }})</span>
                     {% if user == comment.owner %}
                     <a href="{% url 'prcr:comment_delete' comment.id %}"><i class="fa fa-trash"></i></a>

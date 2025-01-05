@@ -190,7 +190,7 @@ class PriceCreateView(LoginRequiredMixin, View):
         price.product = prod
         final_price = max(price.advertised_price, price.higher_price_at_checkout, price.overcharge)
         price.total = final_price + price.shipping + price.hidden_fees
-        if price.tied_cost:
+        if price.tied_sale:
             price.tied_cost = price.total + price.tied_sale
         price.save()
         success_url = reverse_lazy('prcr:product_detail', kwargs={'pk': prod.id})
@@ -218,7 +218,7 @@ class PriceUpdateView(LoginRequiredMixin, View):
         price = form.save(commit=False)
         final_price = max(price.advertised_price, price.higher_price_at_checkout, price.overcharge)
         price.total = final_price + price.shipping + price.hidden_fees
-        if price.tied_cost:
+        if price.tied_sale:
             price.tied_cost = price.total + price.tied_sale
         success_url = reverse_lazy('prcr:product_detail', kwargs={'pk': price.product.id})
         return redirect(success_url)
