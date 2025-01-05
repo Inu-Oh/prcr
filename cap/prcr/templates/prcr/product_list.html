@@ -3,25 +3,26 @@
 
 {% block page_header %}
 {% load humanize %}
-<h2 class="display-5 text-dark"> {{ subcategory.subcategory }} </h2>
+<h2 class="text-dark"><span class="display-5"> {{ subcategory.subcategory }} </span><br>
+    <span class="fs-5">&raquo; {{ subcategory.category }} </span></h2>
 <div>
     <p class="header-stat badge text-dark m-2 p-2 rounded-3 shadow">
     {% if search and filtered_products == 1 %}
-        {{ search }} found once in {{ subcategory.subcategory|lower }}
+        {{ search }} found once in {{ subcategory.subcategory|lower }} {{ subcategory.category|lower }}
     {% elif search and filtered_products or search %}
-        {{ search }} found {{ filtered_products|length }} times in {{ subcategory.subcategory|lower }}
+        {{ search }} found {{ filtered_products|length }} times in {{ subcategory.subcategory|lower }} {{ subcategory.category|lower }}
     {% elif not search and filtered_products|length == 1 %}
-        1 product in {{ subcategory.subcategory|lower }}
+        1 product in {{ subcategory.subcategory|lower }} {{ subcategory.category|lower }}
     {% elif not search and not filtered_products %}
-        0 {{ subcategory.subcategory|lower }} in Pricer
+        0 {{ subcategory.subcategory|lower }} {{ subcategory.category|lower }} in Pricer
     {% else %}
-        {{filtered_products|length}} {{ subcategory.subcategory|lower }} in Pricer
+        {{filtered_products|length}} {{ subcategory.subcategory|lower }} {{ subcategory.category|lower }} in Pricer
     {% endif %}</p>
     <!-- https://www.w3schools.com/howto/howto_css_search_button.asp -->
     <form  class="m-2 input-group">
         <input type="text" name="search" placeholder="Search product names..." class="form-control"
             {% if search %} value="{{ search }}" {% endif %}>
-        <button type="submit" class="btn btn-sm btn-success">
+        <button type="submit" class="btn btn-sm btn-success list-style">
             <i class="fa fa-search p-2"></i></button>
         <a href="{% url 'prcr:product_list' subcategory.id %}"
             class="btn btn-sm btn-outline-dark"><i class="fa fa-undo p-2"></i></a>

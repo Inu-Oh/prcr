@@ -4,7 +4,7 @@
 {% block page_header %}
 {% load humanize %}
 <h2 class="display-5 text-dark">
-    Browse brands</h2>
+    Browse<br>brands</h2>
 <div>
     <p class="header-stat badge text-dark m-2 p-2 rounded-3 shadow">
         {% if search %} Your search found {{ filtered_list|length }} categories {% else %}
@@ -22,7 +22,7 @@
             <option value="{{ brand.brand }}"> {{ brand.brand }} </option>
             {% endfor %}{% endif %}
         </datalist>
-        <button type="submit" class="btn btn-sm btn-success">
+        <button type="submit" class="btn btn-sm btn-success link-style">
             <i class="fa fa-search p-2"></i></button>
         <a href="{% url 'prcr:main_list' %}" class="btn btn-sm btn-outline-dark">
             <i class="fa fa-undo p-2"></i></a>

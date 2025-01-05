@@ -17,8 +17,9 @@
 
 
 {% block page_header %}
-<h2 class="display-3 text-dark"> {{ product.product }} <br>
-    <span class="fs-5"> {{ product.brand }} </span>
+<h2 class="text-dark"><span class="display-3"> {{ product.product }} </span><br>
+    <span class="fs-4"> {{ product.brand }} </span><br>
+    <span class="fs-5"> &#9679; {{ product.subcategory.category|lower }} &raquo; {{ product.subcategory|lower }} </span>
 </h2>
 <p class="header-stat badge text-dark mt-3 p-2 rounded-3 shadow">
     updated<br><br>{{ product.natural_updated }}</p>

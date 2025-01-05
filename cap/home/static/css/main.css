@@ -24,7 +24,7 @@ body, .no-bg {
     background-color: var(--inuOhKimono) !important;
 }
 
-.main, .section, .cards, .product, .no-content {
+.main, .section, .cards, .product, .product-list-item .no-content {
     background-color: var(--inuOhSky) !important;
 }
 
