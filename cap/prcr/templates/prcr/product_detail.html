@@ -17,7 +17,7 @@
 
 
 {% block page_header %}
-<h2 class="display-6 text-dark"> {{ product.product }} <br>
+<h2 class="display-3 text-dark"> {{ product.product }} <br>
     <span class="fs-5"> {{ product.brand }} </span>
 </h2>
 <p class="header-stat badge text-dark mt-3 p-2 rounded-3 shadow">
@@ -96,8 +96,8 @@
                 {% endif %}
             </div>
         </section>
-        <section class="row mb-3 rounded-3">
-            <div class="product-profile col-11 m-3 rounded-3">
+        <section class="row mb-3">
+            <div class="product-profile col-11 m-3">
                 {{ price_chart|safe }}
             </div>
         </section>

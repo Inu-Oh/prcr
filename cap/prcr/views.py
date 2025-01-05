@@ -102,19 +102,7 @@ class BrandListView(ListView):
         brand_list = Brand.objects.all().order_by('brand')
         product_list = Product.objects.all()
         feature_list = Feature.objects.all()
-        price_list = Price.objects.all()
-
-        # Reorder the price list by total price
-        if price_list:
-            for price in price_list:
-                price.natural_date_observed = naturalday(price.date_observed)
-                # Determine the final price of product before fees
-                final_price = max(price.advertised_price, price.higher_price_at_checkout, price.overcharge)
-                # Add all fees
-                total_price = final_price + price.shipping + price.hidden_fees
-                price.total = total_price
-                price.save()
-            price_list.order_by('-total')
+        price_list = Price.objects.order_by('-total')
 
         # Search
         strval = request.GET.get("search", False)
@@ -196,10 +184,14 @@ class PriceCreateView(LoginRequiredMixin, View):
             context = { 'form': form, 'product': prod }
             return render(request, self.template_name, context)
 
-        # Add owner and product to the model before saving
+        # Add owner, product and total price to the model before saving
         price = form.save(commit=False)
         price.owner = self.request.user
         price.product = prod
+        final_price = max(price.advertised_price, price.higher_price_at_checkout, price.overcharge)
+        price.total = final_price + price.shipping + price.hidden_fees
+        if price.tied_cost:
+            price.tied_cost = price.total + price.tied_sale
         price.save()
         success_url = reverse_lazy('prcr:product_detail', kwargs={'pk': prod.id})
         return redirect(success_url)
@@ -222,7 +214,12 @@ class PriceUpdateView(LoginRequiredMixin, View):
             context = { 'form': form, 'price': price }
             return render(request, self.template_name, context)
 
-        form.save()
+        # Adjust total price to the model before saving
+        price = form.save(commit=False)
+        final_price = max(price.advertised_price, price.higher_price_at_checkout, price.overcharge)
+        price.total = final_price + price.shipping + price.hidden_fees
+        if price.tied_cost:
+            price.tied_cost = price.total + price.tied_sale
         success_url = reverse_lazy('prcr:product_detail', kwargs={'pk': price.product.id})
         return redirect(success_url)
 
@@ -234,19 +231,7 @@ class ProductListView(ListView):
         subcategory = SubCategory.objects.get(id=pk)
         brands = Brand.objects.all()
         feature_list = Feature.objects.all()
-        price_list = Price.objects.all() # order for lowest price last
-
-        # Reorder the price list by total price
-        if price_list:
-            for price in price_list:
-                price.natural_date_observed = naturalday(price.date_observed)
-                # Determine the final price of product before fees
-                final_price = max(price.advertised_price, price.higher_price_at_checkout, price.overcharge)
-                # Add all fees
-                total_price = final_price + price.shipping + price.hidden_fees
-                price.total = total_price
-                price.save()
-            price_list.order_by('-total')
+        price_list = Price.objects.order_by('-total') # order for lowest price last
 
         # Search
         strval = request.GET.get("search", False)
