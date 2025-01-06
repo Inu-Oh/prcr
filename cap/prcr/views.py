@@ -4,6 +4,7 @@ from prcr.owner import OwnerDeleteView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.humanize.templatetags.humanize import naturalday #, naturaltime
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db.models.functions import Lower
 from django.http import HttpResponse
@@ -347,6 +348,14 @@ class ProductDetailView(DetailView):
         else:
             price_chart: str = 'There are no prices to plot'
 
+        # Paginate comment and price lists
+        comment_paginator = Paginator(comments, 7)
+        comment_page_num = request.GET.get('comment_page')
+        comment_page_obj = comment_paginator.get_page(comment_page_num)
+        price_paginator = Paginator(price_list, 7)
+        price_page_num = request.GET.get('price_page')
+        price_page_obj = price_paginator.get_page(price_page_num)
+
         context = {
             'product': product,
             'comments': comments,
@@ -355,7 +364,9 @@ class ProductDetailView(DetailView):
             'price_list': price_list,
             'highest_price': highest_price,
             'lowest_price': lowest_price,
-            'price_chart': price_chart
+            'price_chart': price_chart,
+            'comment_page_obj': comment_page_obj,
+            'price_page_obj': price_page_obj,
         }
         return render(request, self.template_name, context)
 

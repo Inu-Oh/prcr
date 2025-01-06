@@ -24,8 +24,12 @@ body, .no-bg {
     background-color: var(--inuOhKimono) !important;
 }
 
-.main, .section, .cards, .product, .product-list-item .no-content {
+.main, .section, .cards, .product, .no-content {
     background-color: var(--inuOhSky) !important;
+}
+
+mark {
+    background-color: var(--inuOhFan) !important;
 }
 
 .product, .no-content {
@@ -43,6 +47,10 @@ body, .no-bg {
 .link-style {
     color: black !important;
     text-decoration: none !important;
+}
+
+.page-link-style {
+    text-shadow: 0 0 3px var(--inuOhHair) !important;
 }
 
 .muted-link-style {
@@ -90,6 +98,7 @@ body, .no-bg {
     list-style-type: none;
     width: 90%;
 }
+
 .product-profile {
     width: 96%
 }
