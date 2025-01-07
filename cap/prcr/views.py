@@ -1,5 +1,5 @@
 from prcr.forms import CommentForm, FeatureCreateForm, PriceForm, ProductBrandCreateForm, ProductAddImageForm, ProductSubcategoryCreateForm, ProductUpdateForm, SubcategoryCreateForm
-from prcr.models import Brand, Category, Comment, Feature, Price, Product, SubCategory
+from prcr.models import Brand, Category, Comment, Feature, Price, Product, SubCategory, UserLikes
 from prcr.owner import OwnerDeleteView
 
 from django.contrib.auth.mixins import LoginRequiredMixin

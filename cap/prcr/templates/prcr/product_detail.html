@@ -390,9 +390,10 @@
                 {% endif %}
                 {% if comments %}
                     {% for comment in comment_page_obj %}
-                    <p> {{ comment.text }}<br>
-                    <span class="badge text-secondary">posted {{ comment.updated_at|naturaltime }}
-                        by {{ comment.owner }}</span>
+                    <p>{{ comment.text }} <strong>{{ comment.likes }}</strong><br>
+                    <span class="badge text-secondary">{{ comment.updated_at|naturaltime }}
+                        </span><span class="badge text-dark">{{ comment.owner }}</span>
+                        &#x1F592;
                         {% if user == comment.owner %}
                         <a href="{% url 'prcr:comment_delete' comment.id %}" class="link-style">
                             <i class="fa fa-trash"></i></a>
@@ -455,6 +456,7 @@
         </section>
     </div>
 </div>
+<!--{% debug %}-->
 {% endblock content %}
 
 

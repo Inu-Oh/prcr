@@ -145,6 +145,7 @@ class UserLikes(models.Model):
 
     class Meta:
         unique_together = ('user', 'comment')
+        verbose_name_plural = 'User likes'
 
     def __str__(self):
         return '%s likes %s'%(self.user.username, self.comment.text[:9])
