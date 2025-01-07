@@ -108,6 +108,25 @@ class Comment(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    likes = models.IntegerField(default=0)
+
+    def like(self, user):
+        try:
+            self.comment_likes.create(user=user, comment=self)
+            self.likes += 1
+            self.save()
+        except:
+            return 'already_voted'
+        return 'ok'
+
+    def dismiss(self, user):
+        try:
+            self.comment_likes.delete(user=user, comment=self)
+            self.likes -= 1
+            self.save()
+        except:
+            return 'already_dismissed'
+        return 'ok'
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -117,6 +136,18 @@ class Comment(models.Model):
         if len(self.text) < 17:
             return self.text
         return self.text[:13] + '...'
+
+
+class UserLikes(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='like_users')
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'comment')
+
+    def __str__(self):
+        return '%s likes %s'%(self.user.username, self.comment.text[:9])
 
 
 class Price(models.Model):

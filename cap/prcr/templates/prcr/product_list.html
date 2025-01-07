@@ -76,7 +76,7 @@
 {% elif not search and not filtered_products %}
 <section class="section no-content p-3 m-3 bg-light rounded-3">
     <div class="text-danger p-3 m-3">
-        <p class="fs-4">There are no products yet in this subcategory.<br>You may add one.</p>
+        <p class="fs-4">There are no {{ subcategory|lower }} {{ subcategory.category|lower }} yet.<br>You may add one.</p>
     </div>
 </section>
 {% endif %}

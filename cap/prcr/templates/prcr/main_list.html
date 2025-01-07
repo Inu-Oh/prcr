@@ -57,12 +57,11 @@
                         <ul class="plain-list">
                             {% for product in product_list %}
                             {% if product.subcategory.id == subcategory.id %}
-                            {% if forloop.counter < 30 %}
                             <li class="m-1">
                                 <a href="{% url 'prcr:product_detail' product.id %}" class="link-style">
                                     &#9679; {{ product.product }}
                                     <span class="text-muted">({{ product.brand.brand }})</span></a></li>
-                            {% endif %}{% endif %}{% endfor %}</span>
+                            {% endif %}{% endfor %}</span>
                             </ul>
                         {% endif %}
                 </div>
