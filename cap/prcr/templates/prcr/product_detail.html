@@ -393,7 +393,16 @@
                     <p>{{ comment.text }} <strong>{{ comment.likes }}</strong><br>
                     <span class="badge text-secondary">{{ comment.updated_at|naturaltime }}
                         </span><span class="badge text-dark">{{ comment.owner }}</span>
-                        &#x1F592;
+                        <!-- Like icon for comment not liked -->
+                        <a href="#comments"
+                            onclick="likeComment('% url 'prcr:like_comment' comment.id %}', {{ comment.id }} );return false;"
+                            {% if comment.id not in comment_likes %} style="display: none;" {% endif %}
+                            id="liked_{{comment.id}}" class="liked">&#x1F592;</a>
+                        <!-- Like icon for comment liked -->
+                        <a href="#comments"
+                            onclick="likeComment('% url 'prcr:dismiss_like' comment.id %}', {{ comment.id }} );return false;"
+                            {% if comment.id in comment_likes %} style="display: none;" {% endif %}
+                            id="not_liked_{{comment.id}}" class="link-style">&#x1F592;</a>
                         {% if user == comment.owner %}
                         <a href="{% url 'prcr:comment_delete' comment.id %}" class="link-style">
                             <i class="fa fa-trash"></i></a>
@@ -456,7 +465,6 @@
         </section>
     </div>
 </div>
-<!--{% debug %}-->
 {% endblock content %}
 
 
@@ -465,6 +473,17 @@
     class="btn btn-sm btn-outline-dark m-2">
     Browse more {{ product.subcategory|lower }} {{ product.subcategory.category|lower }} &raquo;</a></p>
 
+<script>
+function likeComment(url, acomment_id) {
+    console.log('POSTing to', url);
+    fetch(url, { method: 'POST', body: '{}' } )
+    .then((response) => {
+        console.log(url, 'finished');
+    }).catch((error) => {
+        alert('Url failed with '+error+' '+url);
+    });
+}
+</script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 {% endblock footer %}

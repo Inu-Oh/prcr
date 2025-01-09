@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError
 from django.core.validators import MinLengthValidator, MinValueValidator
 # from django.contrib.auth.models import User
 from django.conf import settings
@@ -115,7 +115,7 @@ class Comment(models.Model):
             self.comment_likes.create(user=user, comment=self)
             self.likes += 1
             self.save()
-        except:
+        except IntegrityError:
             return 'already_voted'
         return 'ok'
 
@@ -124,7 +124,7 @@ class Comment(models.Model):
             self.comment_likes.delete(user=user, comment=self)
             self.likes -= 1
             self.save()
-        except:
+        except IntegrityError:
             return 'already_dismissed'
         return 'ok'
 

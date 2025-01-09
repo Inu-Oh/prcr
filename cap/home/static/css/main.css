@@ -103,6 +103,15 @@ mark {
     width: 96%
 }
 
+.liked {
+    color: var(--inuOhHair);
+    text-decoration: none !important;
+}
+
+.liked:hover {
+    color:  var(--inuOhKimono);
+}
+
 #product-profile-pic {
     width: 100%;
 }

@@ -7,10 +7,13 @@ from django.contrib.humanize.templatetags.humanize import naturalday #, naturalt
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.db.models.functions import Lower
+from django.db.utils import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, CreateView
 
 import locale
@@ -59,6 +62,7 @@ class CommentCreateView(LoginRequiredMixin, View):
         comment.save()
         return redirect(reverse('prcr:product_detail', args=[pk]))
 
+
 class CommentDeleteView(OwnerDeleteView):
     model = Comment
     template_name = "prcr/comment_delete_form.html"
@@ -67,6 +71,24 @@ class CommentDeleteView(OwnerDeleteView):
     def get_success_url(self):
         product = self.object.product
         return reverse('prcr:product_detail', args=[product.id])
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class LikeCommentView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        print("Like PK", pk)
+        comment = get_object_or_404(Comment, id=pk)
+        comment.like(user=request.user)
+        return HttpResponse()
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class DismissLikeView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        print("Dismiss like PK", pk)
+        comment = get_object_or_404(Comment, id=pk)
+        comment.dismiss(user=request.user)
+        return HttpResponse()
 
 
 class SubcategoryCreateView(LoginRequiredMixin, CreateView):
@@ -356,6 +378,11 @@ class ProductDetailView(DetailView):
         price_page_num = request.GET.get('price_page')
         price_page_obj = price_paginator.get_page(price_page_num)
 
+        comment_likes = list()
+        if request.user.is_authenticated:
+            rows = request.user.like_users.values('id')
+            comment_likes = [ row['id'] for row in rows ]
+
         context = {
             'product': product,
             'comments': comments,
@@ -367,6 +394,7 @@ class ProductDetailView(DetailView):
             'price_chart': price_chart,
             'comment_page_obj': comment_page_obj,
             'price_page_obj': price_page_obj,
+            'comment_likes': comment_likes,
         }
         return render(request, self.template_name, context)
 
