@@ -48,6 +48,4 @@ urlpatterns = [
 
     path('comment/<int:pk>/like',
         views.LikeCommentView.as_view(), name='like_comment'),
-    path('comment/<int:pk>/dismiss',
-        views.DismissLikeView.as_view(), name='dismiss_like'),
 ]

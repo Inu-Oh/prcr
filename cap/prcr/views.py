@@ -1,5 +1,5 @@
 from prcr.forms import CommentForm, FeatureCreateForm, PriceForm, ProductBrandCreateForm, ProductAddImageForm, ProductSubcategoryCreateForm, ProductUpdateForm, SubcategoryCreateForm
-from prcr.models import Brand, Category, Comment, Feature, Price, Product, SubCategory, UserLikes
+from prcr.models import Brand, Category, Comment, Feature, Like, Price, Product, SubCategory
 from prcr.owner import OwnerDeleteView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -76,18 +76,13 @@ class CommentDeleteView(OwnerDeleteView):
 @method_decorator(csrf_exempt, name='dispatch')
 class LikeCommentView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        print("Like PK", pk)
+        print("Like or dismiss PK", pk)
         comment = get_object_or_404(Comment, id=pk)
-        comment.like(user=request.user)
-        return HttpResponse()
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class DismissLikeView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        print("Dismiss like PK", pk)
-        comment = get_object_or_404(Comment, id=pk)
-        comment.dismiss(user=request.user)
+        try:
+            like = Like(user=request.user, comment=comment)
+            like.save()
+        except IntegrityError:
+            Like(user=request.user, comment=comment).delete()
         return HttpResponse()
 
 
@@ -380,7 +375,7 @@ class ProductDetailView(DetailView):
 
         comment_likes = list()
         if request.user.is_authenticated:
-            rows = request.user.like_users.values('id')
+            rows = request.user.liked_comments.values('id')
             comment_likes = [ row['id'] for row in rows ]
 
         context = {
