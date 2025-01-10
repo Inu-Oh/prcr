@@ -112,9 +112,6 @@ class Comment(models.Model):
         related_name='liked_comments')
     likes_count = models.IntegerField(default=0)
 
-    def count_likes(self):
-        return self.likes.all().count()
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

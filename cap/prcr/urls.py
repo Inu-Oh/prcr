@@ -43,9 +43,8 @@ urlpatterns = [
 
     # Comment create and delete views
     path('product/<int:pk>/comment', views.CommentCreateView.as_view(), name='comment_create'),
-    path('comment/<int:pk>/delete',
-         views.CommentDeleteView.as_view(), name='comment_delete'),
+    path('comment/<int:pk>/delete',  views.CommentDeleteView.as_view(), name='comment_delete'),
 
-    path('comment/<int:pk>/like',
-        views.LikeCommentView.as_view(), name='like_comment'),
+    path('comment/<int:pk>/like', views.LikeCommentView.as_view(), name='like_comment'),
+    # path('comment/<int:pk>/dismiss_like', views.DismissLikeView.as_view(), name='dismiss_like'),
 ]
