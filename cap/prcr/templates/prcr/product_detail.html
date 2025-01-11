@@ -390,7 +390,8 @@
                 {% endif %}
                 {% if comments %}
                     {% for comment in comment_page_obj %}
-                    <p>{{ comment.text }} <strong id="likes_count_{{comment.id}}">
+                    <p>{{ comment.text }}<strong id="likes_count_{{comment.id}}"
+                        likes-count="{{comment.likes_count}}">
                         {{ comment.likes_count }}</strong>
                         <!-- Like icon for comment not liked -->
                         <a href="#comments"
@@ -474,7 +475,7 @@
     class="btn btn-sm btn-outline-dark m-2">
     Browse more {{ product.subcategory|lower }} {{ product.subcategory.category|lower }} &raquo;</a></p>
 
-<script>
+<script type='text/javascript'>
 
 function toggleInlineDisplay(like_id) {
     var elem = document.getElementById(like_id);
@@ -495,13 +496,13 @@ function toggleInlineDisplay(like_id) {
 }
 
 function updateLikesCount(url, comment_id) {
-    var likesCountId = 'likes_count_'+comment_id;
-    var likesCount = document.getElementById(likesCountId);
-    console.log(url);
+    const likesCountId = 'likes_count_'+comment_id;
+    const element = document.getElementById(likesCountId);
+    var likesCount = element.getAttribute('likes-count');
     if (url == '/comment/'+comment_id+'/like') {
-        likesCount.innerHTML = '<span style="color: var(--inuOhHair);">(+1)</span>';
+        element.innerHTML = ' '+likesCount+'<span style="color: var(--inuOhHair);"> +1</span>';
     } else {
-        likesCount.innerHTML = '<span style="color: var(--inuOhKimono);">(-1)</span>';
+        element.innerHTML = ' '+likesCount+'<span style="color: var(--inuOhKimono);"> -1</span>';
     }
 }
 

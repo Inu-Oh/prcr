@@ -76,12 +76,10 @@ class CommentDeleteView(OwnerDeleteView):
 @method_decorator(csrf_exempt, name='dispatch')
 class LikeCommentView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        print("Like or dismiss PK", pk)
         comment = get_object_or_404(Comment, id=pk)
         like = Like(user=request.user, comment=comment)
         try:
             like.save()
-            print('liked')
         except IntegrityError:
             pass
         likes_count = Like.objects.filter(comment=comment).count()
@@ -93,11 +91,9 @@ class LikeCommentView(LoginRequiredMixin, View):
 @method_decorator(csrf_exempt, name='dispatch')
 class DismissLikeView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        print("Like or dismiss PK", pk)
         comment = get_object_or_404(Comment, id=pk)
         try:
             Like.objects.get(user=request.user, comment=comment).delete()
-            print('dismissed like')
         except IntegrityError:
             pass
         likes_count = Like.objects.filter(comment=comment).count()
