@@ -85,6 +85,9 @@ class LikeCommentView(LoginRequiredMixin, View):
         except IntegrityError:
             Like.objects.get(user=request.user, comment=comment).delete()
             print('dismissed like')
+        likes_count = Like.objects.filter(comment=comment).count()
+        comment.likes_count = likes_count
+        comment.save()
         return HttpResponse()
 
 
@@ -307,7 +310,7 @@ class ProductDetailView(DetailView):
     def get(self, request, pk=None):
         product = get_object_or_404(Product, id=pk)
         product.natural_updated = naturalday(product.updated_at)
-        comments = Comment.objects.filter(product=product).order_by('-updated_at')
+        comments = Comment.objects.filter(product=product).order_by('-likes_count', '-created_at')
         comment_form = CommentForm()
         feature_list = Feature.objects.filter(product_id=pk)
         price_list = Price.objects.filter(product_id=pk)

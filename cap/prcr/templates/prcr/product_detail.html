@@ -390,7 +390,8 @@
                 {% endif %}
                 {% if comments %}
                     {% for comment in comment_page_obj %}
-                    <p>{{ comment.text }} <strong>{{ comment.likes_count }}</strong><br>
+                    <p>{{ comment.text }} <strong id="likes_count_{{comment.id}}">
+                        {{ comment.likes_count }}</strong><br>
                     <span class="badge text-secondary">{{ comment.created_at|naturaltime }}
                         </span><span class="badge text-dark">{{ comment.owner }}</span>
                         <!-- Like icon for comment not liked -->
@@ -464,7 +465,7 @@
             </div>
         </section>
     </div>
-</div>{% debug %}
+</div>
 {% endblock content %}
 
 
@@ -475,11 +476,32 @@
 
 <script>
 
+function toggleInlineDisplay(like_id) {
+    var elem = document.getElementById(like_id);
+    if(window.getComputedStyle(elem).display == "inline") {
+        elem.style.display = 'none';
+        elem.dataset.previousDisplay = 'inline';
+    } else if(window.getComputedStyle(elem).display == "block") {
+        elem.style.display = 'none';
+        elem.dataset.previousDisplay = 'block';
+    } else {
+        console.log('prev', elem.dataset.previousDisplay);
+        if ( typeof elem.dataset.previousDisplay == 'string' ) {
+            elem.style.display = elem.dataset.previousDisplay
+        } else {
+            elem.style.display = 'inline';
+        }
+    }
+}
+
 function likeComment(url, comment_id) {
     console.log('POSTing to', url);
     fetch(url, { method: 'POST', body: '{}' } )
     .then((response) => {
         console.log(url, 'finished');
+        toggleInlineDisplay('not_liked_'+comment_id);
+        toggleInlineDisplay('liked_'+comment_id);
+        toggleInlineDisplay('likes_count_'+comment_id)
     }).catch((error) => {
         alert('Url failed with '+error+' '+url);
     });
