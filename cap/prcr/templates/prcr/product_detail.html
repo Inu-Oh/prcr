@@ -391,9 +391,7 @@
                 {% if comments %}
                     {% for comment in comment_page_obj %}
                     <p>{{ comment.text }} <strong id="likes_count_{{comment.id}}">
-                        {{ comment.likes_count }}</strong><br>
-                    <span class="badge text-secondary">{{ comment.created_at|naturaltime }}
-                        </span><span class="badge text-dark">{{ comment.owner }}</span>
+                        {{ comment.likes_count }}</strong>
                         <!-- Like icon for comment not liked -->
                         <a href="#comments"
                             onclick="likeComment('{% url 'prcr:dismiss_like' comment.id %}', {{ comment.id }} );return false;"
@@ -403,7 +401,9 @@
                         <a href="#comments"
                             onclick="likeComment('{% url 'prcr:like_comment' comment.id %}', {{ comment.id }} );return false;"
                             {% if comment.id in comment_likes %} style="display: none;" {% endif %}
-                            id="not_liked_{{comment.id}}" class="link-style">&#x1F592;</a>
+                            id="not_liked_{{comment.id}}" class="link-style">&#x1F592;</a><br>
+                    <span class="badge text-secondary">{{ comment.created_at|naturaltime }}
+                        </span><span class="badge text-dark">{{ comment.owner }}</span>
                         {% if user == comment.owner %}
                         <a href="{% url 'prcr:comment_delete' comment.id %}" class="link-style">
                             <i class="fa fa-trash"></i></a>
@@ -495,15 +495,14 @@ function toggleInlineDisplay(like_id) {
 }
 
 function updateLikesCount(url, comment_id) {
-    var likesCountId = 'likes_count_'+comment_id
+    var likesCountId = 'likes_count_'+comment_id;
     var likesCount = document.getElementById(likesCountId);
-    var oldVal = document.getElementById(likesCountId).value;
-    if (url == 'comment/'+comment_id+'/like') {
-        newVal = parseInt(oldVal) + 1;
+    console.log(url);
+    if (url == '/comment/'+comment_id+'/like') {
+        likesCount.innerHTML += '<span style="color: green;"> +1</span>';
     } else {
-        newVal = parseInt(oldVal) - 1;
+        likesCount.innerHTML += '<span style="color: red;"> -1</span>';
     }
-    likesCount.innerHTML = newVal;
 }
 
 function likeComment(url, comment_id) {
