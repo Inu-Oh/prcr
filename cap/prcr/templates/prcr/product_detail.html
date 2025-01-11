@@ -499,9 +499,9 @@ function updateLikesCount(url, comment_id) {
     var likesCount = document.getElementById(likesCountId);
     console.log(url);
     if (url == '/comment/'+comment_id+'/like') {
-        likesCount.innerHTML += '<span style="color: green;"> +1</span>';
+        likesCount.innerHTML = '<span style="color: var(--inuOhHair);">(+1)</span>';
     } else {
-        likesCount.innerHTML += '<span style="color: red;"> -1</span>';
+        likesCount.innerHTML = '<span style="color: var(--inuOhKimono);">(-1)</span>';
     }
 }
 
