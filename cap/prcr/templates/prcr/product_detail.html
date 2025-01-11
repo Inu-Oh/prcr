@@ -396,7 +396,7 @@
                         </span><span class="badge text-dark">{{ comment.owner }}</span>
                         <!-- Like icon for comment not liked -->
                         <a href="#comments"
-                            onclick="likeComment('{% url 'prcr:like_comment' comment.id %}', {{ comment.id }} );return false;"
+                            onclick="likeComment('{% url 'prcr:dismiss_like' comment.id %}', {{ comment.id }} );return false;"
                             {% if comment.id not in comment_likes %} style="display: none;" {% endif %}
                             id="liked_{{comment.id}}" class="liked">&#x1F592;</a>
                         <!-- Like icon for comment liked -->
@@ -494,6 +494,18 @@ function toggleInlineDisplay(like_id) {
     }
 }
 
+function updateLikesCount(url, comment_id) {
+    var likesCountId = 'likes_count_'+comment_id
+    var likesCount = document.getElementById(likesCountId);
+    var oldVal = document.getElementById(likesCountId).value;
+    if (url == 'comment/'+comment_id+'/like') {
+        newVal = parseInt(oldVal) + 1;
+    } else {
+        newVal = parseInt(oldVal) - 1;
+    }
+    likesCount.innerHTML = newVal;
+}
+
 function likeComment(url, comment_id) {
     console.log('POSTing to', url);
     fetch(url, { method: 'POST', body: '{}' } )
@@ -501,7 +513,7 @@ function likeComment(url, comment_id) {
         console.log(url, 'finished');
         toggleInlineDisplay('not_liked_'+comment_id);
         toggleInlineDisplay('liked_'+comment_id);
-        toggleInlineDisplay('likes_count_'+comment_id)
+        updateLikesCount(url, comment_id)
     }).catch((error) => {
         alert('Url failed with '+error+' '+url);
     });

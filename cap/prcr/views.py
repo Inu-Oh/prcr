@@ -83,24 +83,27 @@ class LikeCommentView(LoginRequiredMixin, View):
             like.save()
             print('liked')
         except IntegrityError:
-            Like.objects.get(user=request.user, comment=comment).delete()
-            print('dismissed like')
+            pass
         likes_count = Like.objects.filter(comment=comment).count()
         comment.likes_count = likes_count
         comment.save()
         return HttpResponse()
 
 
-# @method_decorator(csrf_exempt, name='dispatch')
-# class DismissLikeView(LoginRequiredMixin, View):
-#     def post(self, request, pk):
-#         print("Like or dismiss PK", pk)
-#         comment = get_object_or_404(Comment, id=pk)
-#         try:
-#             Like.objects.get(user=request.user, comment=comment).delete()
-#         except IntegrityError:
-#             pass
-#         return HttpResponse()
+@method_decorator(csrf_exempt, name='dispatch')
+class DismissLikeView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        print("Like or dismiss PK", pk)
+        comment = get_object_or_404(Comment, id=pk)
+        try:
+            Like.objects.get(user=request.user, comment=comment).delete()
+            print('dismissed like')
+        except IntegrityError:
+            pass
+        likes_count = Like.objects.filter(comment=comment).count()
+        comment.likes_count = likes_count
+        comment.save()
+        return HttpResponse()
 
 
 class SubcategoryCreateView(LoginRequiredMixin, CreateView):
