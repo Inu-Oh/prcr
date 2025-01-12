@@ -390,8 +390,8 @@
                 {% endif %}
                 {% if comments %}
                     {% for comment in comment_page_obj %}
-                    <p>{{ comment.text }}<strong id="likes_count_{{comment.id}}"
-                        likes-count="{{comment.likes_count}}">
+                    <p>{{ comment.text }}<strong id="likes_count_{{comment.id}}" class="comment"
+                        comment-id="{{comment.id}}" likes-count="{{comment.likes_count}}">
                         {{ comment.likes_count }}</strong>
                         <!-- Like icon for comment not liked -->
                         <a href="#comments"
@@ -477,6 +477,14 @@
 
 <script type='text/javascript'>
 
+const commentElement = document.querySelectorAll('.comment');
+const jsCommentsObj = {}; // create DOM data for Comment object
+for (let comment of commentElement.values()) {
+    var id = comment.getAttribute('comment-id');
+    var likesCount = comment.getAttribute('likes-count');
+    jsCommentsObj[id] = parseInt(likesCount);
+}
+
 function toggleInlineDisplay(like_id) {
     var elem = document.getElementById(like_id);
     if(window.getComputedStyle(elem).display == "inline") {
@@ -495,14 +503,19 @@ function toggleInlineDisplay(like_id) {
     }
 }
 
-function updateLikesCount(url, comment_id) {
+function updateLikesCount(url, comment_id) { // update DOM data to reflect Comment object changes
     const likesCountId = 'likes_count_'+comment_id;
     const element = document.getElementById(likesCountId);
-    var likesCount = element.getAttribute('likes-count');
     if (url == '/comment/'+comment_id+'/like') {
-        element.innerHTML = ' '+likesCount+'<span style="color: var(--inuOhHair);"> +1</span>';
+        prevLikesCount = jsCommentsObj[comment_id];
+        newLikesCount = prevLikesCount + 1;
+        jsCommentsObj[comment_id] = newLikesCount;
+        element.innerHTML = ' <span class="liked-count">'+newLikesCount+'</span>';
     } else {
-        element.innerHTML = ' '+likesCount+'<span style="color: var(--inuOhKimono);"> -1</span>';
+        prevLikesCount = jsCommentsObj[comment_id];
+        newLikesCount = prevLikesCount - 1;
+        jsCommentsObj[comment_id] = newLikesCount;
+        element.innerHTML = ' <span class="dismissed-like-count">'+newLikesCount+'</span>';
     }
 }
 

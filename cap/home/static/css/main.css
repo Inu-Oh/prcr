@@ -112,6 +112,16 @@ mark {
     color:  var(--inuOhKimono);
 }
 
+.liked-count {
+    color: green;
+    text-shadow: 0 0 2px var(--inuOhHair);
+}
+
+.dismissed-like-count {
+    color: var(--inuOhKimono);
+    text-shadow: 0 0 2px hotpink;
+}
+
 #product-profile-pic {
     width: 100%;
 }
