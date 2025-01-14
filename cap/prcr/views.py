@@ -266,6 +266,7 @@ class ProductListView(ListView):
         brands = Brand.objects.all()
         feature_list = Feature.objects.all()
         price_list = Price.objects.order_by('-total') # order for lowest price last
+        comments = Comment.objects.all().order_by('-likes_count')
 
         # Search
         strval = request.GET.get("search", False)
@@ -298,6 +299,7 @@ class ProductListView(ListView):
             'feature_list': feature_list,
             'product_lowest_price_list': product_lowest_price_list,
             'search': strval,
+            'comments': comments,
             }
         return render(request, self.template_name, context)
 

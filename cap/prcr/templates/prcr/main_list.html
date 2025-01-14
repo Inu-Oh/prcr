@@ -23,9 +23,9 @@
             <option value="{{ category.category }}"> {{ category.category }} </option>
             {% endfor %}{% endif %}
         </datalist>
-        <button type="submit" class="btn btn-sm btn-success link-style">
+        <button type="submit" class="btn btn-sm btn-success muted-link-style">
             <i class="fa fa-search p-2"></i></button>
-        <a href="{% url 'prcr:main_list' %}" class="btn btn-sm btn-outline-dark">
+        <a href="{% url 'prcr:main_list' %}" class="btn btn-sm btn-outline-dark link-style">
             <i class="fa fa-undo p-2"></i></a>
     </form>
 </div>

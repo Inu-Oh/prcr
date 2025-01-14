@@ -22,10 +22,10 @@
     <form  class="m-2 input-group">
         <input type="text" name="search" placeholder="Search product names..." class="form-control"
             {% if search %} value="{{ search }}" {% endif %}>
-        <button type="submit" class="btn btn-sm btn-success list-style">
+        <button type="submit" class="btn btn-sm btn-success muted-link-style">
             <i class="fa fa-search p-2"></i></button>
         <a href="{% url 'prcr:product_list' subcategory.id %}"
-            class="btn btn-sm btn-outline-dark"><i class="fa fa-undo p-2"></i></a>
+            class="btn btn-sm btn-outline-dark link-style"><i class="fa fa-undo p-2"></i></a>
     </form>
 </div>
 <p><a class="btn btn-md btn-outline-dark mt-3 ms-2"
@@ -50,6 +50,9 @@
             {% endif %}{% endfor %}{% endif %}<br>
             {% if feature_list %}{% for feature in feature_list %}{% if feature.product_id == product.id %}
             {{ feature }} &raquo; {% endif %}{% endfor %}{% endif %}</span></a>
+            {% if comments %}{% for comment in comments %}{% if forloop.counter == 1 %}{% if comment.product.id == product.id %}
+            <p class="text-muted ps-3">Popular product</p>
+            {% endif %}{% endif %}{% endfor %}{% endif %}
             {% if product.owner_id == user.id %}
             <p><a class="btn btn-sm btn-outline-secondary m-3"
                 href="{% url 'prcr:product_update' product.id %}">
