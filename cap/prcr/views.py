@@ -274,7 +274,7 @@ class ProductListView(ListView):
             query = Q(product__icontains=strval)
             product_list = Product.objects.filter(query).select_related().distinct()
         else:
-            product_list = Product.objects.all()
+            product_list = Product.objects.filter(subcategory=subcategory)
 
         product_list = product_list.order_by(Lower('product')).values()
         filtered_products = product_list.filter(subcategory_id=pk)
