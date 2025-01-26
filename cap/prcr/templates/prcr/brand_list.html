@@ -7,7 +7,8 @@
     Browse<br>brands</h2>
 <div>
     <p class="header-stat badge text-dark m-2 p-2 rounded-3 shadow">
-        {% if search %} Your search found {{ filtered_list|length }} categories {% else %}
+        {% if search %} {% if filtered_list|length != 1 %} Your search found {{ filtered_list|length }} categories
+        {% else %} Your search found 1 category {% endif %} {% else %}
         {% if brand_list|length != 1 %} {{ brand_list|length }} brands &nbsp;&raquo;&nbsp;
         {% else %} {{ brand_list|length }} brand &nbsp;&raquo;&nbsp; {% endif %}
         {% if product_list|length != 1 %} {{ product_list|length }} products</p>
