@@ -51,7 +51,7 @@
             {% if feature_list %}{% for feature in feature_list %}{% if feature.product_id == product.id %}
             {{ feature }} &raquo; {% endif %}{% endfor %}{% endif %}</span></a>
             {% if comments %}{% for comment in comments %}{% if forloop.counter == 1 %}{% if comment.product.id == product.id %}
-            <p class="text-muted ps-3">Popular product</p>
+            <p class="text-success ps-3">Popular product</p>
             {% endif %}{% endif %}{% endfor %}{% endif %}
             {% if product.owner_id == user.id %}
             <p><a class="btn btn-sm btn-outline-secondary m-3"

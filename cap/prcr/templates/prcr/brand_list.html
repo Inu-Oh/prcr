@@ -46,11 +46,12 @@
 </section>
 <section class="container ">
     {% if product_list %}
-    <div class="row m-0">
+    <div class="row m-0 container">
         {% for product in product_list %}
         {% if product.brand.id == brand.id %}
         <a href="{% url 'prcr:product_detail' product.id %}" class="link-style col-md-6">
             <div class="cards card p-2 mt-3 row g-0 border rounded-3 overflow-hidden shadow h-md-250 position-relative">
+
                 <div class="row g-0 card-header flex-md-row">
                     <h5 class="link-style fs-3 text-dark pt-2">
                     {{ product.product }}
@@ -66,10 +67,11 @@
                         {{ feature }} &raquo;
                         {% endif %}{% endfor %}{% endif %}
                     </p>
-                    {% if product.content_type %}
-                    <img src="{% url 'prcr:product_picture' product.id %}" class="card-pic rounded-3 ms-3">
-                    {% endif %}
+
                 </div>
+                {% if product.content_type %}
+                    <img src="{% url 'prcr:product_picture' product.id %}" class="card-img-bottom card-pic">
+                    {% endif %}
             </div>
         </a>
         {% endif %}

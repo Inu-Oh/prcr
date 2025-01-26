@@ -54,8 +54,7 @@ class Brand(models.Model):
     )
     class Meta:
         unique_together = ['brand', 'company']
-    # add logo for upload
-    # add trust rating
+
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 

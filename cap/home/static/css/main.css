@@ -72,8 +72,10 @@ mark {
 }
 
 .card-pic {
-    height: 99px;
-    float: right;
+    height: 150px;
+    width: 150px;
+    display: block;
+    margin-left: auto;
 }
 
 .product-pic {
