@@ -42,19 +42,27 @@
     <div class="container-fluid">
         <h4 class="heading p-3 mb-3 bg-light rounded-3 shadow text-dark d-flex justify-content-between align-items-center">
         {{ category.category }}
+        <button class="btn btn-sm btn-success" data-bs-toggle="collapse" data-bs-target="#{{ category.category }}-list"
+            aria-expanded="false" aria-controls="{{ category.category }}-list">Toggle subcategory list</button>
         <a href="{% url 'prcr:subcategory_create' category.id %}"
             class="btn btn-sm btn-outline-dark">
             Add a subcategory to {{ category.category|lower }} &raquo;</a></h4>
         {% if subcategory_list %}
-        <ul>
+        <ul id="{{ category.category }}-list" class="row collapse">
             {% for subcategory in subcategory_list %}
             {% if subcategory.category.id == category.id %}
             <li class="plain-list">
-                <div class="cards p-3 mb-3 rounded 3 shadow text-small">
-                    <a href="{% url 'prcr:product_list' subcategory.id %}" class="link-style">
+                <div class="cards p-3 mb-3 rounded 3 shadow text-small container">
+                    <a href="{% url 'prcr:product_list' subcategory.id %}" class="link-style me-3">
                         <strong>{{ subcategory.subcategory }}</strong></a>
+                        <button class="btn btn-sm btn-secondary" data-bs-toggle="collapse"
+                            data-bs-target="#{{ category.category }}-{{ subcategory.subcategory }}-products"
+                            aria-expanded="true"
+                            aria-controls="{{ category.category }}-{{ subcategory.subcategory }}-products">
+                            Toggle product list</button>
                         {% if product_list %}<span class="text-muted">
-                        <ul class="plain-list">
+                        <ul class="row collapse show plain-list"
+                            id="{{ category.category }}-{{ subcategory.subcategory }}-products">
                             {% for product in product_list %}
                             {% if product.subcategory.id == subcategory.id %}
                             <li class="m-1">
